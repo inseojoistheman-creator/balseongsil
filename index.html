@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="발성실">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.json">
+<title>또박또박 발성실</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+</head>
+<body>
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+img{max-width:100%}[hidden]{display:none!important}
+:root{
+  --bg:#f5f6f3; --surface:#ffffff; --surface2:#eceeea; --line:#d7dbd4;
+  --ink:#152220; --muted:#4f5f5c; --faint:#8a9794;
+  --teal:#0f766e; --teal-soft:#d6ecea; --coral:#d9573a; --coral-soft:#fbe1da; --amber:#c2860f; --amber-soft:#f8ebc9; --blue:#2f5fb3; --blue-soft:#dfe7f7;
+  --shadow:0 6px 20px rgba(21,34,32,.07);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#111716; --surface:#1a2221; --surface2:#232d2c; --line:#33403e;
+  --ink:#eef3f1; --muted:#b4c2be; --faint:#7d8c89;
+  --teal:#4fc3b6; --teal-soft:#1c3b38; --coral:#ff7f61; --coral-soft:#4a2a22; --amber:#e6b04a; --amber-soft:#463818; --blue:#7fa3ee; --blue-soft:#243554;
+  --shadow:0 6px 20px rgba(0,0,0,.4);
+}}
+:root[data-theme="dark"]{
+  --bg:#111716; --surface:#1a2221; --surface2:#232d2c; --line:#33403e;
+  --ink:#eef3f1; --muted:#b4c2be; --faint:#7d8c89;
+  --teal:#4fc3b6; --teal-soft:#1c3b38; --coral:#ff7f61; --coral-soft:#4a2a22; --amber:#e6b04a; --amber-soft:#463818; --blue:#7fa3ee; --blue-soft:#243554;
+  --shadow:0 6px 20px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans KR",-apple-system,system-ui,sans-serif;font-size:16px;line-height:1.6}
+.wrap{max-width:900px;margin:0 auto;padding:16px 16px 90px}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+button:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+h1{font-size:26px;margin:0;font-weight:700;letter-spacing:-.01em}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.top .sub{color:var(--muted);font-size:14px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px 11px;font-size:13px;color:var(--muted)}
+.chip b{color:var(--ink);font-weight:600}
+
+.tabs{display:flex;gap:4px;background:var(--surface2);padding:4px;border-radius:14px;margin:8px 0 16px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+.tabs button{flex:1;padding:9px 6px;border-radius:10px;font-weight:600;font-size:14px;color:var(--muted)}
+.tabs button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.page{display:none}.page.on{display:block}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:var(--shadow);margin-bottom:12px}
+.card h2{margin:0 0 6px;font-size:19px;font-weight:700;display:flex;align-items:center;gap:8px}
+.card h2 .tag{font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--teal-soft);color:var(--teal);margin-left:auto}
+.card .lead{color:var(--muted);font-size:14.5px;margin:0 0 10px}
+
+/* routine */
+.steps{display:grid;gap:8px}
+.step{display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:center;padding:12px 14px;border-radius:14px;background:var(--surface2);border:1px solid transparent}
+.step.cur{border-color:var(--teal);background:var(--teal-soft)}
+.step.done{opacity:.6}
+.step .n{width:34px;height:34px;border-radius:50%;background:var(--surface);display:grid;place-items:center;font-weight:700;color:var(--teal);border:1px solid var(--line)}
+.step.done .n{background:var(--teal);color:#fff;border-color:var(--teal)}
+.step .t{font-weight:600}
+.step .d{font-size:13px;color:var(--muted)}
+.step .m{font-size:13px;color:var(--faint);white-space:nowrap}
+.runner{margin-top:14px;padding:16px;border-radius:16px;background:var(--surface2);text-align:center}
+.runner .big{font-size:64px;line-height:1;font-weight:600}
+.runner .what{font-size:18px;font-weight:700;margin-top:6px}
+.runner .how{font-size:14.5px;color:var(--muted);margin-top:6px;line-height:1.65;max-width:56ch;margin-left:auto;margin-right:auto;white-space:pre-line}
+.runner .cue{margin-top:10px;font-size:22px;font-weight:600;letter-spacing:.06em;color:var(--teal);min-height:30px}
+.btnrow{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.btn{padding:11px 18px;border-radius:12px;font-weight:600;font-size:15px;background:var(--surface);border:1px solid var(--line)}
+.btn.primary{background:var(--teal);color:#fff;border-color:var(--teal)}
+.btn.warn{background:var(--coral);color:#fff;border-color:var(--coral)}
+.btn:disabled{opacity:.4}
+.note{font-size:13px;color:var(--faint);margin-top:8px}
+
+/* methods */
+.method{margin-bottom:12px}
+.method h3{margin:0;font-size:17px;font-weight:700}
+.method .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+@media (max-width:640px){.method .grid{grid-template-columns:1fr}}
+.method .box{padding:12px 14px;border-radius:12px;background:var(--surface2);font-size:14.5px;line-height:1.7}
+.method .box.why{background:var(--blue-soft)}
+.method .box b{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.method .box.why b{color:var(--blue)}
+.method ol,.method ul{margin:0;padding-left:18px}
+.method li{margin:2px 0}
+.method .try{margin-top:8px;font-size:13px;color:var(--teal);font-weight:600}
+
+/* tools */
+.tool .meter{height:22px;border-radius:999px;background:var(--surface2);border:1px solid var(--line);overflow:hidden;position:relative;margin-top:8px}
+.tool .meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--amber) 70%,var(--coral));transition:width .08s linear}
+.tool .meter .band{position:absolute;top:0;bottom:0;left:35%;width:35%;border-left:2px dashed rgba(0,0,0,.25);border-right:2px dashed rgba(0,0,0,.25)}
+.tool .readout{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px}
+.tool .readout div{font-size:13px;color:var(--muted)}
+.tool .readout b{display:block;font-size:26px;font-weight:600;color:var(--ink);line-height:1.1}
+.pitchcanvas{width:100%;height:120px;display:block;background:var(--surface2);border-radius:12px;border:1px solid var(--line);margin-top:8px}
+textarea{width:100%;font:inherit;font-size:17px;line-height:1.7;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface2);color:inherit;resize:vertical;min-height:70px}
+.diff{margin-top:8px;font-size:17px;line-height:1.9;padding:10px 12px;border-radius:12px;background:var(--surface2);min-height:44px}
+.diff .ok{color:var(--teal)}.diff .bad{color:var(--coral);text-decoration:underline;font-weight:600}
+.score{font-size:40px;font-weight:700;line-height:1}
+.score small{font-size:14px;color:var(--muted);font-weight:500;margin-left:6px}
+.recs{display:grid;gap:6px;margin-top:10px}
+.rec{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:var(--surface2);font-size:14px}
+.rec audio{height:32px;flex:1;min-width:0}
+.rec .lbl{color:var(--muted);font-size:13px;white-space:nowrap}
+.sentences{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.sentences button{font-size:13px;padding:5px 10px;border-radius:999px;background:var(--surface2);border:1px solid var(--line)}
+.rec-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--coral);margin-right:6px;animation:blink 1s infinite alternate}
+@keyframes blink{to{opacity:.2}}
+
+/* log */
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:8px}
+.cal .h{font-size:11px;text-align:center;color:var(--faint)}
+.cal .c{aspect-ratio:1;border-radius:8px;border:1px solid var(--line);display:grid;place-items:center;font-size:12px;color:var(--faint)}
+.cal .c.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.cal .c.today{outline:2px solid var(--coral);outline-offset:-2px}
+.cal .c.future{opacity:.35}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:12px;color:var(--muted);border-bottom:1px solid var(--line);padding:6px 4px;font-weight:600}
+td{padding:7px 4px;border-bottom:1px solid var(--surface2)}
+.empty{color:var(--faint);font-size:14px;padding:12px;text-align:center}
+.sync{font-size:12px;color:var(--faint);text-align:center;margin-top:16px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <div><h1>또박또박 발성실</h1><div class="sub">하루 10분. 숨 → 성대 → 울림 → 혀와 입술 → 전달, 순서대로.</div></div>
+    <div class="chips"><span class="chip">🔥 연속 <b id="stStreak">0</b>일</span><span class="chip">루틴 <b id="stDays">0</b>회</span><span class="chip">받아쓰기 최고 <b id="stBest">–</b></span></div>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="on" data-tab="routine">루틴</button>
+    <button data-tab="methods">훈련법</button>
+    <button data-tab="tools">도구</button>
+    <button data-tab="log">기록</button>
+  </div>
+
+  <!-- ROUTINE -->
+  <section class="page on" id="p-routine">
+    <div class="card">
+      <h2>10분 루틴 <span class="tag" id="routineTag">시작 전</span></h2>
+      <p class="lead">각 단계는 타이머가 돈다. 순서에는 이유가 있다: 숨이 소리의 동력이고, 성대가 풀려야 울림이 생기고, 울림 위에 조음이 얹힌다.</p>
+      <div class="runner" id="runner" hidden>
+        <div class="big mono" id="rTime">0:00</div>
+        <div class="what" id="rWhat"></div>
+        <div class="how" id="rHow"></div>
+        <div class="cue mono" id="rCue"></div>
+        <div class="btnrow">
+          <button class="btn" id="rPause">일시정지</button>
+          <button class="btn primary" id="rNext">다음 단계 →</button>
+          <button class="btn" id="rStop">그만</button>
+        </div>
+      </div>
+      <div class="steps" id="steps" style="margin-top:12px"></div>
+      <div class="btnrow" id="startRow"><button class="btn primary" id="startBtn">루틴 시작</button></div>
+      <div class="note">소리를 내기 어려운 장소면 1·2단계는 숨과 허밍만으로도 된다. 6단계는 "마이크 도구 → 받아쓰기"로 자동 연결된다.</div>
+    </div>
+  </section>
+
+  <!-- METHODS -->
+  <section class="page" id="p-methods">
+    <div class="card"><h2>왜 이 순서인가</h2><p class="lead" style="margin:0">목소리는 세 부품으로 난다. <b>동력</b>(폐에서 올라오는 공기 압력), <b>진동원</b>(성대), <b>공명기</b>(목·입·코의 공간). 발음은 그 위에서 혀·입술·턱이 소리를 자르고 다듬는 <b>조음</b>이다. 아래쪽 부품이 불안정하면 위쪽에서 아무리 애써도 힘이 들어가고 목이 쉰다. 그래서 호흡 → 발성 → 공명 → 조음 → 전달 순서로 쌓는다.</p></div>
+    <div id="methods"></div>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="page" id="p-tools">
+    <div class="card tool">
+      <h2>🎚 음량 미터 · 지속음</h2>
+      <p class="lead">"스ㅡㅡ" 또는 "아ㅡㅡ"를 점선 구간 안에서 흔들림 없이 유지해 보자. 흔들리면 호흡 지지가 흔들리는 것.</p>
+      <div class="meter"><i id="volFill"></i><div class="band"></div></div>
+      <div class="readout"><div>현재 음량<b class="mono" id="volNow">0</b></div><div>지속 시간<b class="mono" id="susNow">0.0s</b></div><div>최고 지속<b class="mono" id="susBest">0.0s</b></div></div>
+      <div class="btnrow" style="justify-content:flex-start"><button class="btn primary" id="micBtn">마이크 켜기</button></div>
+    </div>
+    <div class="card tool">
+      <h2>🎼 음높이 · 억양</h2>
+      <p class="lead">허밍이나 낭독을 하면 음높이 선이 그려진다. 말할 때 선이 평평하면 단조로운 목소리, 문장 끝에서 자연스럽게 내려가면 안정감이 있다.</p>
+      <canvas class="pitchcanvas" id="pitchCanvas" width="800" height="120"></canvas>
+      <div class="readout"><div>현재<b class="mono" id="pitchNow">–</b></div><div>음<b class="mono" id="noteNow">–</b></div><div>최근 30초 폭<b class="mono" id="pitchRange">–</b></div></div>
+    </div>
+    <div class="card tool">
+      <h2>🎙 녹음 · 다시 듣기</h2>
+      <p class="lead">자기 목소리는 두개골을 타고 들려서 실제보다 낮고 굵게 느껴진다. 녹음으로 듣는 소리가 남이 듣는 소리다.</p>
+      <div class="btnrow" style="justify-content:flex-start"><button class="btn warn" id="recBtn">● 녹음 시작</button></div>
+      <div class="recs" id="recs"></div>
+    </div>
+    <div class="card tool">
+      <h2>✍️ 발음 받아쓰기</h2>
+      <p class="lead">문장을 고르고 읽으면 음성인식이 받아 적는다. 기계가 못 알아들은 글자가 사람도 흘려듣는 글자다.</p>
+      <textarea id="target" placeholder="읽을 문장"></textarea>
+      <div class="sentences" id="sentences"></div>
+      <div class="btnrow" style="justify-content:flex-start"><button class="btn primary" id="dictBtn">읽기 시작</button><span class="note" id="dictHint" style="margin:0;align-self:center"></span></div>
+      <div class="diff" id="diff"></div>
+      <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span class="score" id="score">–</span><span class="note" id="scoreNote" style="margin:0"></span></div>
+    </div>
+  </section>
+
+  <!-- LOG -->
+  <section class="page" id="p-log">
+    <div class="card"><h2>출석</h2><div class="cal" id="cal"></div></div>
+    <div class="card"><h2>받아쓰기 점수</h2><table><thead><tr><th>날짜</th><th>문장</th><th style="text-align:right">정확도</th></tr></thead><tbody id="scores"></tbody></table></div>
+    <div class="card"><h2>지속음 기록</h2><table><thead><tr><th>날짜</th><th style="text-align:right">최고 지속</th></tr></thead><tbody id="susLog"></tbody></table></div>
+  </section>
+  <div class="sync" id="syncMsg">이 기기에 저장됨</div>
+</div>
+
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const todayKey = () => { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+
+// ---------- content ----------
+const STEPS = [
+  {t:'호흡 리셋', sec:90, d:'4초 들숨 · 4초 멈춤 · 8초 스ㅡ', cycle:[4,4,8], how:'코로 4초 들이마시며 배와 옆구리가 부풀게. 4초 멈춤. 입으로 "스ㅡ" 8초 내쉰다. 어깨는 올라가지 않는다.', cue:['들숨 4','멈춤 4','스ㅡ 8']},
+  {t:'립트릴 · 허밍', sec:90, d:'입술 털며 사이렌, 이어서 허밍', how:'입술을 털며 "브르르르" 낮은 음에서 높은 음으로 사이렌처럼 오르내린다. 입술이 안 털리면 손가락으로 볼을 살짝 받친다. 이어서 입 다물고 "음ㅡ" 허밍, 코와 입술이 간질간질하게.', cue:['브르르 ↗','브르르 ↘','음ㅡ 허밍']},
+  {t:'공명 · 마스크', sec:90, d:'허밍에서 모음으로, 울림은 앞쪽에', how:'"음ㅡ마 음ㅡ마" 허밍에서 입을 열며 "마"로 나간다. 울림이 목이 아니라 코 옆·광대(마스크) 쪽에 머물게. 이어서 "마메미모무", "나네니노누".', cue:['음ㅡ마','마 메 미 모 무','나 네 니 노 누']},
+  {t:'모음 · 턱과 입', sec:90, d:'거울 앞에서 아에이오우 두 배 크게', how:'거울 앞. "아 에 이 오 우"를 평소보다 두 배 크게 벌리며 또렷하게. 턱이 좌우로 흔들리지 않게, "이"에서 입꼬리, "오·우"에서 입술을 앞으로.', cue:['아 에 이 오 우 (크게)','아 에 이 오 우 (느리게)','아 에 이 오 우 (보통 속도)']},
+  {t:'자음 · 잰말놀이', sec:120, d:'느리게 → 정확 → 속도', how:'먼저 느리게, 한 글자씩 끝소리(받침)까지 살려서. 정확해진 뒤에만 속도를 올린다. 틀리면 속도를 반으로.', cue:['간장 공장 공장장은 강 공장장이고, 된장 공장 공장장은 공 공장장이다','경찰청 철창살은 외철창살이고, 검찰청 철창살은 쌍철창살이다','내가 그린 기린 그림은 목 긴 기린 그림이고, 네가 그린 기린 그림은 목 안 긴 기린 그림이다','저기 저 뜀틀이 내가 뛸 뜀틀인가 내가 안 뛸 뜀틀인가']},
+  {t:'낭독 · 전달', sec:120, d:'받아쓰기로 문장 하나, 끊어 읽기와 문장 끝', how:'마이크 도구의 받아쓰기로 문장 하나를 읽는다. 끊어 읽을 곳에서 확실히 쉬고, 핵심 단어는 조금 높고 길게. 문장 끝은 내려서 마친다.', cue:['받아쓰기 탭으로 →'], tool:true},
+];
+const METHODS = [
+  {t:'1. 복식호흡과 "스ㅡ" 지속음', how:['앉거나 서서 한 손은 배, 한 손은 가슴. 가슴 손은 움직이지 않게.','코로 4초 들이마시며 배·옆구리·등까지 넓어지게.','"스ㅡ" 소리로 최대한 일정하게 내쉰다. 처음엔 15초, 목표 25초 이상.','음량 미터의 점선 구간 안에 바늘을 고정하는 연습.'], why:'목소리의 크기와 안정감은 성대 아래 공기 압력(성문하압)이 얼마나 일정한가로 결정된다. 횡격막과 늑간근이 이 압력을 조절하는 엔진이다. 가슴으로 얕게 쉬면 압력이 들쭉날쭉해져 말끝이 떨리거나 갈라지고, 목 근육이 그걸 보상하느라 조인다. "스ㅡ"는 성대를 쓰지 않고 압력 조절만 따로 떼어 훈련하는 방법이다.', tool:'음량 미터'},
+  {t:'2. 립트릴 · 빨대 발성 (SOVT)', how:['입술을 느슨하게 붙이고 "브르르르"로 낮은 음↔높은 음 사이렌.','입술이 안 털리면 볼을 손가락으로 살짝 받친다.','빨대를 물고 "우ㅡ" 소리를 내며 같은 사이렌. 물컵에 빨대를 꽂고 거품을 일정하게 내면 더 좋다.','하루 2~3분. 말하기 전 워밍업, 말한 뒤 쿨다운으로.'], why:'입술이나 빨대로 출구를 반쯤 막으면(반폐쇄 성도, SOVT) 입 안의 압력이 올라가 성대 위에서 되밀어 준다. 그 덕에 성대가 세게 부딪히지 않고도 효율적으로 진동하고, 성대 접촉 압력이 줄어 피로와 손상이 준다. 동시에 성도 전체가 성대 진동과 맞물리는 감각(공명 연결)을 익힌다. 음성치료와 성악 훈련에서 가장 널리 쓰이는 기법이다.', tool:'음높이'},
+  {t:'3. 허밍 → 마스크 공명', how:['입 다물고 "음ㅡ". 코·입술·앞니 쪽이 간질거리는지 확인.','"음ㅡ마, 음ㅡ메" 허밍에서 모음으로 열되 울림 위치를 그대로 둔다.','"마메미모무 / 나네니노누"를 같은 울림으로.','목이 조이면 다시 허밍으로 돌아간다.'], why:'같은 성대 진동이라도 어디서 울리느냐에 따라 청자에게 닿는 크기가 달라진다. 소리를 입 앞쪽(구강 앞·비강 근처)에 모으면 2~4kHz 대역 배음이 강해지는데, 이 대역은 사람 귀가 가장 민감한 구간이라 힘을 더 주지 않아도 "잘 들리는" 소리가 된다. 목 뒤로 삼키는 소리는 배음이 죽어 작고 답답하게 들리고, 크게 내려다 목을 조이게 된다.', tool:'녹음'},
+  {t:'4. 모음 과장 · 턱 풀기', how:['거울 앞에서 "아 에 이 오 우"를 두 배 크게. 턱은 아래로만, 좌우로 흔들리지 않게.','턱 관절을 손으로 마사지하고, 하품하듯 크게 벌렸다가 놓는다.','펜을 입에 물고(앞니로 가볍게) 문장을 읽는다. 1분 뒤 펜을 빼고 같은 문장을 읽는다.'], why:'한국어 명료도의 절반은 모음이 정확히 벌어지는가에서 갈린다. 턱이 굳으면 "아"와 "어", "오"와 "우"가 뭉개져 웅얼거림으로 들린다. 펜 물기는 혀와 입술에 과부하를 걸어 평소보다 훨씬 크게 움직이게 만드는 저항 훈련이다. 펜을 빼면 같은 노력이 여유가 되어 조음이 선명해진다(운동 학습의 대비 효과).', tool:'녹음'},
+  {t:'5. 자음 · 받침 · 잰말놀이', how:['파열음 "파 타 카 / 빠 따 까"를 손바닥 앞에서 바람이 느껴질 만큼 터뜨린다.','받침 있는 단어를 끝소리까지: "국, 밥, 꽃, 있다, 없다".','잰말놀이는 반드시 느리게 → 정확 → 속도 순. 틀리면 속도 절반.'], why:'조음은 운동 기술이라 근육 기억으로 배운다. 운동 학습에서 정확한 느린 반복은 올바른 회로를 굳히고, 빠르고 부정확한 반복은 틀린 회로를 굳힌다. 잰말놀이는 비슷한 조음 위치(ㄱ/ㅈ, ㅊ/ㅅ)가 연달아 나와 혀가 위치를 빨리 바꾸게 강제한다. 받침 탈락은 한국어에서 가장 흔한 뭉개짐이라 따로 챙긴다.', tool:'받아쓰기'},
+  {t:'6. 속도 · 끊어 읽기 · 문장 끝', how:['문장에 /(짧게) //(길게) 표시를 하고 그대로 읽는다.','핵심 단어 하나만 조금 높고 길게. 나머지는 낮춘다.','문장 끝을 내려서 닫는다. 올리면 질문처럼, 유지하면 끝나지 않은 것처럼 들린다.','1분에 300음절 안팎이 대화·발표에 편안한 속도. 녹음해서 재보자.'], why:'듣는 사람은 소리를 단어 단위로 저장했다가 구 단위로 해석한다. 쉼이 없으면 처리 대기열이 넘쳐 뒤쪽 내용이 사라진다. 강세와 억양(프로소디)은 어디가 중요한 정보인지 알려주는 표지판이고, 문장 끝 하강은 "여기서 한 단위 끝"이라는 신호다. 발음이 정확해도 이 신호가 없으면 "잘 들리는데 무슨 말인지 모르겠다"가 된다.', tool:'음높이·녹음'},
+  {t:'7. 매일 10분, 왜 길게보다 자주인가', how:['길게 한 번보다 짧게 매일. 루틴 탭의 10분이면 충분하다.','말하기 전 2분(호흡+립트릴)만이라도.','목이 아프거나 쉰 날은 소리 훈련을 빼고 호흡·빨대만.'], why:'조음과 발성은 지식이 아니라 운동 기술이다. 운동 기술은 수면 중에 굳어지므로(기억 공고화) 하루 걸러 몰아 하는 것보다 매일 짧게 하는 쪽이 같은 총량으로 더 많이 남는다. 또 성대는 점막이라 과사용에 약하다. 짧고 잦은 훈련은 효과는 챙기고 손상은 피하는 방식이다.', tool:'기록'},
+];
+const SENTENCES = ['안녕하세요, 오늘 발표를 맡은 조인서입니다. 잘 부탁드립니다.','간장 공장 공장장은 강 공장장이고, 된장 공장 공장장은 공 공장장이다.','국물이 뜨거우니 천천히 드시고, 꽃병은 창가에 두세요.','경찰청 철창살은 외철창살이고, 검찰청 철창살은 쌍철창살이다.','핵심은 세 가지입니다. 첫째 준비, 둘째 연습, 셋째 기록입니다.','여덟 시 정각에 역 앞에서 만나 함께 걸어가자.'];
+
+// ---------- state ----------
+const KEY='speech-studio-v1';
+let S={days:[], scores:[], sus:[], best:0, updatedAt:0};
+try{ const r=localStorage.getItem(KEY); if(r) S=Object.assign(S,JSON.parse(r)); }catch(e){}
+let db=null, docRef=null, wT=null, applying=false;
+function persist(){ S.updatedAt=Date.now(); try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} if(docRef&&!applying){ clearTimeout(wT); wT=setTimeout(async()=>{ try{ await docRef.set(JSON.parse(JSON.stringify(S))); $('syncMsg').textContent='클라우드에 동기화됨'; }catch(e){ $('syncMsg').textContent='이 기기에 저장됨 (동기화 실패)'; } },600);} }
+(async()=>{ try{ db=await (window.claude?.use?.('db')??Promise.resolve(null)); if(!db) return; docRef=db.doc('state/main'); const s=await docRef.get(); if(s.exists){ const r=s.data(); if((r.updatedAt||0)>(S.updatedAt||0)){ applying=true; S=Object.assign(S,r); try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} renderLog(); applying=false; } else if((S.updatedAt||0)>(r.updatedAt||0)) persist(); } else persist(); $('syncMsg').textContent='클라우드에 동기화됨'; docRef.onSnapshot(sn=>{ if(!sn.exists||sn.metadata.hasPendingWrites) return; const r=sn.data(); if((r.updatedAt||0)>(S.updatedAt||0)){ applying=true; S=Object.assign(S,r); renderLog(); applying=false; } },()=>{}); }catch(e){} })();
+
+// ---------- tabs ----------
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+function showTab(k){ document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===k)); document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id==='p-'+k)); if(k==='log') renderLog(); }
+
+// ---------- routine ----------
+let R=null; // {i, left, timer, paused, cueIdx}
+function renderSteps(){ $('steps').innerHTML=STEPS.map((s,i)=>`<div class="step ${R&&R.i===i?'cur':''} ${R&&i<R.i?'done':''}"><div class="n">${R&&i<R.i?'✓':i+1}</div><div><div class="t">${s.t}</div><div class="d">${s.d}</div></div><div class="m mono">${Math.floor(s.sec/60)}:${String(s.sec%60).padStart(2,'0')}</div></div>`).join(''); }
+function startRoutine(){ R={i:0,left:STEPS[0].sec,paused:false,cueIdx:0,cueT:0}; $('runner').hidden=false; $('startRow').hidden=true; $('routineTag').textContent='진행 중'; $('runner').scrollIntoView({behavior:'smooth',block:'start'}); tick(); R.timer=setInterval(tick,1000); renderSteps(); }
+function tick(){
+  if(!R||R.paused) return;
+  const s=STEPS[R.i];
+  $('rTime').textContent=Math.floor(R.left/60)+':'+String(R.left%60).padStart(2,'0');
+  $('rWhat').textContent=(R.i+1)+'단계 · '+s.t; $('rHow').textContent=s.how;
+  const el=s.sec-R.left;
+  if(s.cycle){ const tot=s.cycle.reduce((a,b)=>a+b,0); let x=el%tot, idx=0; while(x>=s.cycle[idx]){ x-=s.cycle[idx]; idx++; } $('rCue').textContent=s.cue[idx]+'  ·  '+(s.cycle[idx]-x); }
+  else { const per=Math.max(4,Math.floor(s.sec/Math.max(1,s.cue.length))); $('rCue').textContent=s.cue[Math.min(s.cue.length-1,Math.floor(el/per))]; }
+  if(R.left<=0){ nextStep(); return; }
+  R.left--;
+}
+function nextStep(){ if(!R) return; if(STEPS[R.i].tool){ showTab('tools'); } R.i++; if(R.i>=STEPS.length){ finishRoutine(); return; } R.left=STEPS[R.i].sec; renderSteps(); tick(); if(STEPS[R.i].tool){ showTab('tools'); setTimeout(()=>$('target').scrollIntoView({behavior:'smooth',block:'center'}),100); } }
+function finishRoutine(){ clearInterval(R.timer); R=null; const k=todayKey(); if(!S.days.includes(k)) S.days.push(k); persist(); $('runner').hidden=true; $('startRow').hidden=false; $('routineTag').textContent='오늘 완료 ✓'; renderSteps(); renderLog(); showTab('routine'); }
+$('startBtn').onclick=startRoutine;
+$('rNext').onclick=nextStep;
+$('rPause').onclick=()=>{ if(!R) return; R.paused=!R.paused; $('rPause').textContent=R.paused?'재개':'일시정지'; };
+$('rStop').onclick=()=>{ if(!R) return; clearInterval(R.timer); R=null; $('runner').hidden=true; $('startRow').hidden=false; $('routineTag').textContent='중단'; renderSteps(); };
+renderSteps();
+
+// ---------- methods ----------
+$('methods').innerHTML=METHODS.map(m=>`<div class="card method"><h3>${m.t}</h3><div class="grid"><div class="box"><b>방법</b><ol>${m.how.map(h=>'<li>'+h+'</li>').join('')}</ol></div><div class="box why"><b>왜 효과가 있나</b>${m.why}</div></div><div class="try">함께 쓰는 도구 · ${m.tool}</div></div>`).join('');
+
+// ---------- audio: mic, meter, pitch ----------
+let AC=null, analyser=null, micStream=null, rafId=null, buf=null;
+let susStart=0, susBest=0, pitchHist=[];
+async function micOn(){
+  if(micStream) { micOff(); return; }
+  try{ micStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false}}); }
+  catch(e){ $('micBtn').textContent='마이크 권한이 필요하다'; return; }
+  AC=AC||new (window.AudioContext||window.webkitAudioContext)(); if(AC.state==='suspended') await AC.resume();
+  const src=AC.createMediaStreamSource(micStream); analyser=AC.createAnalyser(); analyser.fftSize=2048; src.connect(analyser); buf=new Float32Array(analyser.fftSize);
+  $('micBtn').textContent='마이크 끄기'; $('micBtn').classList.remove('primary'); loop();
+}
+function micOff(){ cancelAnimationFrame(rafId); if(micStream){ micStream.getTracks().forEach(t=>t.stop()); micStream=null; } $('micBtn').textContent='마이크 켜기'; $('micBtn').classList.add('primary'); $('volFill').style.width='0%'; }
+function loop(){
+  analyser.getFloatTimeDomainData(buf);
+  let sum=0; for(let i=0;i<buf.length;i++) sum+=buf[i]*buf[i];
+  const rms=Math.sqrt(sum/buf.length); const db=20*Math.log10(rms+1e-8); const pct=Math.max(0,Math.min(100,(db+60)/60*100));
+  $('volFill').style.width=pct+'%'; $('volNow').textContent=Math.round(pct);
+  const now=performance.now();
+  if(pct>=30){ if(!susStart) susStart=now; const d=(now-susStart)/1000; $('susNow').textContent=d.toFixed(1)+'s'; if(d>susBest){ susBest=d; $('susBest').textContent=d.toFixed(1)+'s'; } }
+  else { if(susStart && susBest>=3){ logSus(susBest); } susStart=0; }
+  const f=pitch(buf,AC.sampleRate);
+  if(f>0){ pitchHist.push({t:now,f}); $('pitchNow').textContent=Math.round(f)+' Hz'; $('noteNow').textContent=noteName(f); }
+  pitchHist=pitchHist.filter(p=>now-p.t<30000);
+  if(pitchHist.length>5){ const fs=pitchHist.map(p=>p.f); const lo=Math.min(...fs), hi=Math.max(...fs); $('pitchRange').textContent=(12*Math.log2(hi/lo)).toFixed(1)+' 반음'; }
+  drawPitch(now);
+  rafId=requestAnimationFrame(loop);
+}
+function logSus(v){ const k=todayKey(); let r=S.sus.find(x=>x.d===k); if(!r){ r={d:k,v:0}; S.sus.unshift(r); } if(v>r.v){ r.v=Math.round(v*10)/10; S.sus=S.sus.slice(0,60); persist(); } }
+function pitch(b,sr){ // autocorrelation
+  let rms=0; for(let i=0;i<b.length;i++) rms+=b[i]*b[i]; rms=Math.sqrt(rms/b.length); if(rms<0.01) return -1;
+  const SIZE=b.length; let best=-1, bestC=0;
+  const minL=Math.floor(sr/500), maxL=Math.floor(sr/70);
+  for(let lag=minL;lag<=maxL;lag++){ let c=0; for(let i=0;i<SIZE-lag;i++) c+=b[i]*b[i+lag]; c/= (SIZE-lag); if(c>bestC){ bestC=c; best=lag; } }
+  let e0=0; for(let i=0;i<SIZE;i++) e0+=b[i]*b[i]; e0/=SIZE;
+  if(best<0 || bestC/e0<0.5) return -1;
+  return sr/best;
+}
+function noteName(f){ const n=Math.round(12*Math.log2(f/440))+69; const names=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B']; return names[n%12]+(Math.floor(n/12)-1); }
+function drawPitch(now){
+  const c=$('pitchCanvas'), ctx=c.getContext('2d'); const W=c.width,H=c.height; ctx.clearRect(0,0,W,H);
+  const cs=getComputedStyle(document.documentElement);
+  ctx.strokeStyle=cs.getPropertyValue('--line'); ctx.lineWidth=1; [100,150,200,300].forEach(f=>{ const y=yOf(f,H); ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); ctx.fillStyle=cs.getPropertyValue('--faint'); ctx.font='11px IBM Plex Mono'; ctx.fillText(f+'Hz',4,y-3); });
+  ctx.strokeStyle=cs.getPropertyValue('--teal'); ctx.lineWidth=2.5; ctx.beginPath(); let started=false, last=0;
+  pitchHist.forEach(p=>{ const x=W-(now-p.t)/30000*W, y=yOf(p.f,H); if(!started||p.t-last>250){ ctx.moveTo(x,y); started=true; } else ctx.lineTo(x,y); last=p.t; }); ctx.stroke();
+}
+function yOf(f,H){ const lo=Math.log2(70), hi=Math.log2(500); return H-(Math.log2(f)-lo)/(hi-lo)*H; }
+$('micBtn').onclick=micOn;
+
+// ---------- recorder ----------
+let recorder=null, chunks=[], recN=0;
+$('recBtn').onclick=async()=>{
+  if(recorder&&recorder.state==='recording'){ recorder.stop(); return; }
+  let stream; try{ stream=await navigator.mediaDevices.getUserMedia({audio:true}); }catch(e){ $('recBtn').textContent='마이크 권한이 필요하다'; return; }
+  const mime=['audio/mp4','audio/webm;codecs=opus','audio/webm'].find(m=>window.MediaRecorder&&MediaRecorder.isTypeSupported(m))||'';
+  recorder=new MediaRecorder(stream, mime?{mimeType:mime}:undefined); chunks=[];
+  recorder.ondataavailable=e=>chunks.push(e.data);
+  recorder.onstop=()=>{ stream.getTracks().forEach(t=>t.stop()); const blob=new Blob(chunks,{type:recorder.mimeType}); const url=URL.createObjectURL(blob); recN++; const row=document.createElement('div'); row.className='rec'; row.innerHTML=`<span class="lbl">${recN}번째 · ${new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}</span><audio controls src="${url}"></audio>`; $('recs').prepend(row); while($('recs').children.length>5) $('recs').lastChild.remove(); $('recBtn').innerHTML='● 녹음 시작'; $('recBtn').classList.add('warn'); };
+  recorder.start(); $('recBtn').innerHTML='<span class="rec-dot"></span>녹음 중… 누르면 멈춤';
+};
+
+// ---------- dictation ----------
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+$('sentences').innerHTML=SENTENCES.map((s,i)=>`<button data-i="${i}">${s.slice(0,14)}…</button>`).join('');
+$('sentences').onclick=e=>{ const b=e.target.closest('button[data-i]'); if(b){ $('target').value=SENTENCES[+b.dataset.i]; } };
+$('target').value=SENTENCES[0];
+if(!SR){ $('dictBtn').disabled=true; $('dictHint').textContent='이 브라우저는 음성인식을 지원하지 않는다 (Safari·Chrome에서 열자).'; }
+let rec=null, listening=false;
+$('dictBtn').onclick=()=>{
+  if(listening){ rec.stop(); return; }
+  const target=$('target').value.trim(); if(!target){ $('target').focus(); return; }
+  rec=new SR(); rec.lang='ko-KR'; rec.interimResults=true; rec.continuous=true; let heard='';
+  rec.onresult=e=>{ heard=''; for(let i=0;i<e.results.length;i++) heard+=e.results[i][0].transcript; $('diff').textContent=heard; };
+  rec.onerror=e=>{ $('dictHint').textContent= e.error==='not-allowed'?'마이크 권한이 막혀 있다.':'인식 오류: '+e.error; };
+  rec.onend=()=>{ listening=false; $('dictBtn').textContent='읽기 시작'; $('dictBtn').classList.add('primary'); if(heard) grade(target,heard); };
+  try{ rec.start(); listening=true; $('dictBtn').textContent='다 읽었다 (멈춤)'; $('dictBtn').classList.remove('primary'); $('dictHint').textContent='듣는 중… 또박또박 읽고 버튼을 누르자.'; $('diff').textContent=''; $('score').textContent='–'; $('scoreNote').textContent=''; }catch(e){}
+};
+const norm=s=>s.replace(/[\s.,!?~·'"‘’“”]/g,'');
+function grade(target,heard){
+  const a=norm(target), b=norm(heard);
+  // LCS-based alignment to mark missed characters
+  const n=a.length,m=b.length; const dp=Array.from({length:n+1},()=>new Uint16Array(m+1));
+  for(let i=n-1;i>=0;i--) for(let j=m-1;j>=0;j--) dp[i][j]= a[i]===b[j]? dp[i+1][j+1]+1 : Math.max(dp[i+1][j],dp[i][j+1]);
+  let i=0,j=0,html='',ok=0;
+  const src=target.replace(/\s+/g,' ');
+  const mark={}; while(i<n&&j<m){ if(a[i]===b[j]){ mark[i]=true; ok++; i++; j++; } else if(dp[i+1][j]>=dp[i][j+1]) i++; else j++; }
+  let k=0; for(const ch of src){ if(/[\s.,!?~·'"‘’“”]/.test(ch)){ html+=ch; continue; } html+=`<span class="${mark[k]?'ok':'bad'}">${ch}</span>`; k++; }
+  const pct=Math.round(ok/Math.max(1,n)*100);
+  $('diff').innerHTML=html+`<div style="font-size:13px;color:var(--muted);margin-top:6px">들린 대로: ${heard}</div>`;
+  $('score').innerHTML=pct+'%<small>정확도</small>';
+  $('scoreNote').textContent= pct>=95?'거의 완벽. 속도를 조금 올려보자.': pct>=85?'빨간 글자만 느리게 다시 세 번.': '문장을 반으로 나눠 느리게. 받침과 모음 벌림을 확인.';
+  $('dictHint').textContent='';
+  S.scores.unshift({d:todayKey(),s:target.slice(0,18),p:pct}); S.scores=S.scores.slice(0,60); if(pct>S.best) S.best=pct; persist(); renderLog();
+}
+
+// ---------- log ----------
+function renderLog(){
+  const days=new Set(S.days); const today=new Date(); const start=new Date(today); start.setDate(today.getDate()-((today.getDay()+6)%7)-21);
+  let html=['월','화','수','목','금','토','일'].map(d=>'<div class="h">'+d+'</div>').join('');
+  for(let i=0;i<28;i++){ const d=new Date(start); d.setDate(start.getDate()+i); const k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); html+=`<div class="c ${days.has(k)?'on':''} ${k===todayKey()?'today':''} ${d>today?'future':''}">${d.getDate()}</div>`; }
+  $('cal').innerHTML=html;
+  let st=0; const d=new Date(); if(!days.has(todayKey())) d.setDate(d.getDate()-1); for(;;){ const k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); if(days.has(k)){ st++; d.setDate(d.getDate()-1); } else break; if(st>999) break; }
+  $('stStreak').textContent=st; $('stDays').textContent=S.days.length; $('stBest').textContent=S.best?S.best+'%':'–';
+  $('scores').innerHTML=S.scores.length?S.scores.slice(0,30).map(x=>`<tr><td class="mono">${x.d.slice(5)}</td><td>${x.s}…</td><td style="text-align:right" class="mono">${x.p}%</td></tr>`).join(''):'<tr><td colspan="3" class="empty">아직 없음</td></tr>';
+  $('susLog').innerHTML=S.sus.length?S.sus.slice(0,30).map(x=>`<tr><td class="mono">${x.d.slice(5)}</td><td style="text-align:right" class="mono">${x.v}s</td></tr>`).join(''):'<tr><td colspan="2" class="empty">아직 없음</td></tr>';
+  if(days.has(todayKey())) $('routineTag').textContent='오늘 완료 ✓';
+}
+renderLog();
+})();
+</script>
+
+</body>
+</html>
