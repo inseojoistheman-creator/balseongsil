@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#111417">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -16,6 +16,8 @@
 <style>
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 img{max-width:100%}[hidden]{display:none!important}
+
+html,body{touch-action:manipulation}*{touch-action:manipulation}button,.step,.tile,.piano button,.seg button,.exsw button,.tabs button,.w,.script .w{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
 
 :root{
   --bg:#111417; --panel:#1a1e24; --panel2:#22272f; --line:#2f3641; --line2:#3d4552;
@@ -784,6 +786,8 @@ renderLog();
 
 })();
 </script>
+<script>document.addEventListener("dblclick",e=>{e.preventDefault();},{passive:false});let __lt=0;document.addEventListener("touchend",e=>{const n=Date.now();if(n-__lt<300&&e.target.closest("button")){e.preventDefault();e.target.closest("button").click();}__lt=n;},{passive:false});</script>
+
 
 
 <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});}</script>
