@@ -191,11 +191,11 @@ td{padding:6px;border-bottom:1px solid var(--line)}
 <div class="wrap">
   <div class="top">
     <div class="logo"><i></i></div>
-    <div><h1>또박또박 발성실</h1><div class="sub">숨 → 성대 → 울림 → 조음 → 전달 → 노래</div></div>
+    <div><h1>또박또박 발성실</h1><div class="sub">숨 → 성대 → 울림 → 조음 → 전달 → 대화·면접 → 노래</div></div>
     <div class="micbar"><button class="micbtn" id="micBtn"><span class="dot"></span><span id="micTxt">MIC</span></button></div>
   </div>
   <div class="vu"><i id="vuFill"></i></div>
-  <div class="chips"><span class="chip">🔥 연속 <b id="stStreak">0</b>일</span><span class="chip">루틴 <b id="stDays">0</b>회</span><span class="chip">음역 <b id="stRange">–</b></span><span class="chip">음정 게임 최고 <b id="stGame">–</b></span><span class="chip" id="netChip">오프라인 OK</span></div>
+  <div class="chips"><span class="chip">🔥 연속 <b id="stStreak">0</b>일</span><span class="chip">루틴 <b id="stDays">0</b>회</span><span class="chip">음역 <b id="stRange">–</b></span><span class="chip">음정 게임 최고 <b id="stGame">–</b></span><span class="chip">성량 최고 <b id="stProj">–</b></span><span class="chip" id="netChip">오프라인 OK</span></div>
 
   <!-- ===== HOME / ROUTINE ===== -->
   <section class="page on" id="p-home">
@@ -208,7 +208,7 @@ td{padding:6px;border-bottom:1px solid var(--line)}
 
     <div class="rack">
       <h2>루틴 <span class="tag off" id="routineTag">시작 전</span></h2>
-      <div class="seg" id="modeSeg"><button data-mode="basic" class="on">기본 10분</button><button data-mode="sing">찬양 전 6분</button><button data-mode="talk">발표 전 3분</button><button data-mode="rand">랜덤 7분</button></div>
+      <div class="seg" id="modeSeg"><button data-mode="basic" class="on">기본 10분</button><button data-mode="sing">찬양 전 6분</button><button data-mode="talk">발표 전 3분</button><button data-mode="interview">면접 전 4분</button><button data-mode="chat">대화 전 2분</button><button data-mode="rand">랜덤 7분</button></div>
       <p class="lead" id="modeLead" style="margin-top:8px"></p>
       <div class="runner" id="runner" hidden>
         <div class="big" id="rTime">0:00</div>
@@ -232,7 +232,7 @@ td{padding:6px;border-bottom:1px solid var(--line)}
   <section class="page" id="p-methods">
     <div class="rack">
       <h2>훈련법과 원리</h2>
-      <div class="mtabs seg" id="mSeg"><button data-m="voice" class="on">발성</button><button data-m="sing">노래</button><button data-m="talk">전달</button></div>
+      <div class="mtabs seg" id="mSeg"><button data-m="voice" class="on">발성</button><button data-m="sing">노래</button><button data-m="talk">전달</button><button data-m="talkpro">대화·면접</button><button data-m="care">목 관리</button></div>
       <div id="methods"></div>
     </div>
   </section>
@@ -287,6 +287,43 @@ td{padding:6px;border-bottom:1px solid var(--line)}
 
   <!-- ===== TALK / DELIVERY ===== -->
   <section class="page" id="p-talk">
+    <div class="rack">
+      <h2>성량 프로젝션 <span class="tag">오프라인</span></h2>
+      <p class="lead">거리를 고르고 문장을 읽는다. 바늘이 초록 구간(그 거리에 알맞은 크기) 안에 머문 비율이 점수. 목이 아니라 배로 받쳐서.</p>
+      <div class="row"><div class="seg" id="pjSeg"><button data-pj="1" class="on">1m 대화</button><button data-pj="3">3m 회의·면접</button><button data-pj="10">10m 강당</button></div></div>
+      <div class="meter" id="pjMeter"><i id="pjFill"></i><div class="band" id="pjBand"></div></div>
+      <div class="twist" id="pjText" style="font-size:17px;min-height:70px">안녕하세요, 조인서입니다. 오늘 이 자리에 설 수 있어서 감사합니다. 저는 세 가지를 말씀드리겠습니다.</div>
+      <div class="leds"><div class="led"><small>남은 시간</small><b id="pjTime">20s</b></div><div class="led"><small>구간 안 비율</small><b class="big" id="pjScore">–</b></div><div class="led"><small>너무 작음 / 큼</small><b id="pjLoHi">–</b></div><div class="led"><small>최고</small><b id="pjBest">–</b></div></div>
+      <div class="btnrow"><button class="btn primary" id="pjStart">▶ 20초 시작</button><button class="btn ghost" id="pjNew">다른 문장</button></div>
+      <div class="note" id="pjNote"></div>
+      <div class="why"><b>WHY</b>거리마다 "알맞은 크기"가 있다. 1m에서 10m 소리를 내면 상대는 피로하고, 3m에서 1m 소리를 내면 안 들린다. 크기를 맞추되 소리는 목이 아니라 호흡으로 받친다. 점수가 낮으면서 목이 아프면 밀고 있는 것, 점수가 낮고 목이 편하면 숨이 얕은 것.</div>
+    </div>
+
+    <div class="rack">
+      <h2>대화 톤 찾기 <span class="tag">오프라인</span></h2>
+      <p class="lead">① "음-흠" 허밍으로 편한 높이를 잰다 → ② 문장을 읽어 말소리 높이를 잰다 → 차이를 본다. 긴장하면 말소리가 올라간다.</p>
+      <div class="leds"><div class="led"><small>① 편한 허밍 음</small><b class="big" id="tnBase">–</b></div><div class="led"><small>② 말소리 음</small><b class="big" id="tnTalk">–</b></div><div class="led"><small>차이</small><b id="tnDiff">–</b></div></div>
+      <div class="btnrow"><button class="btn primary" id="tnStep1">① 음-흠 3번 (6초)</button><button class="btn" id="tnStep2">② 문장 읽기 (8초)</button></div>
+      <div class="twist" id="tnText" style="font-size:17px;min-height:60px">저는 새로운 것을 배우는 걸 좋아하고, 배운 것을 남에게 설명할 때 가장 즐겁습니다.</div>
+      <div class="note" id="tnNote">허밍 음은 저장된다. 다음부터는 ②만 해서 그날 상태를 본다.</div>
+      <div class="why"><b>WHY</b>편한 허밍 음 ±2반음이 가장 힘 안 들고 울림이 큰 말소리 높이다. 3반음 이상 높으면 후두가 올라간 상태(긴장·목 조임), 3반음 이상 낮으면 눌러서 내는 소리(성대 피로). 면접 직전에 ②를 한 번 재 보면 지금 긴장했는지 숫자로 보인다.</div>
+    </div>
+
+    <div class="rack">
+      <h2>면접 답변 연습 <span class="tag">오프라인</span></h2>
+      <p class="lead">질문 뽑기 → 30초 생각 → 60초 답변 녹음 → 듣고 다섯 항목 자가 채점. 내용이 아니라 소리를 채점한다.</p>
+      <div class="twist" id="ivQ" style="font-size:18px">🎲 질문을 뽑는다</div>
+      <div class="leds"><div class="led"><small>단계</small><b id="ivPhase" style="font-size:15px">대기</b></div><div class="led"><small>시간</small><b class="big" id="ivTime">–</b></div><div class="led"><small>오늘 채점 평균</small><b id="ivAvg">–</b></div></div>
+      <div class="btnrow"><button class="btn primary" id="ivDraw">🎲 질문 뽑기</button><button class="btn" id="ivStart">▶ 30초 준비 → 60초 답변</button><button class="btn rec" id="ivRec">● 답변 녹음</button></div>
+      <div class="recs" id="ivRecs"></div>
+      <div id="ivCheck" style="margin-top:10px;display:none">
+        <div class="tip">녹음을 듣고 체크한다.</div>
+        <div class="row" style="gap:6px"><button class="btn sm" data-iv="0">첫 문장 느리게</button><button class="btn sm" data-iv="1">결론 먼저</button><button class="btn sm" data-iv="2">문장 끝 내림</button><button class="btn sm" data-iv="3">쉼이 있었다</button><button class="btn sm" data-iv="4">음 높이 안정</button></div>
+        <div class="btnrow"><button class="btn primary" id="ivSave">채점 저장</button></div>
+      </div>
+      <div class="why"><b>WHY</b>면접 답변은 녹음해서 들어야 는다. 말하는 동안엔 내용에 정신이 팔려 소리를 못 듣는다. 다섯 항목은 면접관이 "차분하고 확신 있다"고 느끼는 신호를 그대로 옮긴 것이다. 3개 이상이면 합격선, 5개면 그 답변은 완성.</div>
+    </div>
+
     <div class="rack">
       <h2>잰말놀이 트레이너 <span class="tag">오프라인</span></h2>
       <p class="lead">느리게 → 정확 → 속도. 박에 맞춰 한 글자씩. 틀리면 단계를 내린다.</p>
@@ -360,6 +397,16 @@ td{padding:6px;border-bottom:1px solid var(--line)}
       <div class="note">녹음은 이 화면을 닫으면 사라진다. 남길 만한 건 길게 눌러 저장하거나 공유.</div>
     </div>
     <div class="rack">
+      <h2>목 상태 체크 · s/z 비율 <span class="tag">오프라인</span></h2>
+      <p class="lead">"스—"를 최대한 길게, 그다음 "즈—"를 최대한 길게. 자동으로 길이를 잰다. s÷z가 1.2 이하면 정상.</p>
+      <div class="leds"><div class="led"><small>스— (s)</small><b class="big" id="szS">–</b></div><div class="led"><small>즈— (z)</small><b class="big" id="szZ">–</b></div><div class="led"><small>s/z 비율</small><b class="big" id="szR">–</b></div><div class="led"><small>판정</small><b id="szV" style="font-size:14px">–</b></div></div>
+      <div class="btnrow"><button class="btn primary" id="szS1">① 스— 시작</button><button class="btn" id="szS2">② 즈— 시작</button><button class="btn ghost" id="szReset">초기화</button></div>
+      <div class="note" id="szNote">시작을 누르고 숨을 채운 뒤 소리를 낸다. 소리가 1초 끊기면 자동으로 멈춘다.</div>
+      <div class="tip" style="margin-top:12px"><b>오늘 목 상태</b> · 해당되는 것만 누른다</div>
+      <div class="row" style="gap:6px"><button class="btn sm" data-care="hoarse">쉰 소리</button><button class="btn sm" data-care="pain">통증·이물감</button><button class="btn sm" data-care="high">높은 음 안 나감</button><button class="btn sm" data-care="talkalot">오늘 말 많이 함</button><button class="btn sm" data-care="water">물 1L 이상 ✓</button></div>
+      <div class="tip" id="careAdvice" style="margin-top:8px"></div>
+    </div>
+    <div class="rack">
       <h2>설정</h2>
       <div class="row"><label>화면</label><div class="seg" id="themeSeg"><button data-th="dark" class="on">스튜디오(어둡게)</button><button data-th="light">밝게</button></div></div>
       <div class="btnrow"><button class="btn sm" id="bkCopy">기록 백업 복사</button><button class="btn sm" id="bkPaste">백업 붙여넣기 복원</button></div>
@@ -370,6 +417,9 @@ td{padding:6px;border-bottom:1px solid var(--line)}
   <!-- ===== LOG ===== -->
   <section class="page" id="p-log">
     <div class="rack"><h2>출석</h2><div class="cal" id="cal"></div><div class="note" id="chLog"></div></div>
+    <div class="rack"><h2>성량 프로젝션</h2><table><thead><tr><th>날짜</th><th>거리</th><th style="text-align:right">점수</th></tr></thead><tbody id="projLog"></tbody></table></div>
+    <div class="rack"><h2>목 상태 · s/z</h2><table><thead><tr><th>날짜</th><th>s</th><th>z</th><th style="text-align:right">비율</th></tr></thead><tbody id="szLog"></tbody></table></div>
+    <div class="rack"><h2>면접 답변 채점</h2><table><thead><tr><th>날짜</th><th>질문</th><th style="text-align:right">점수 /5</th></tr></thead><tbody id="ivLog"></tbody></table></div>
     <div class="rack"><h2>음역대 변화</h2><table><thead><tr><th>날짜</th><th>최저</th><th>최고</th><th style="text-align:right">폭</th></tr></thead><tbody id="rangeLog"></tbody></table></div>
     <div class="rack"><h2>음정 게임</h2><table><thead><tr><th>날짜</th><th style="text-align:right">점수 /30</th></tr></thead><tbody id="gameLog"></tbody></table></div>
     <div class="rack"><h2>말속도</h2><table><thead><tr><th>날짜</th><th>글</th><th style="text-align:right">음절/분</th></tr></thead><tbody id="speedLog"></tbody></table></div>
@@ -410,17 +460,21 @@ const STEP = {
   scale:{t:'5음계 · 모음 통일', d:'앱의 음계를 "마—"로 따라간다', how:'도레미파솔파미레도. 한 모음으로, 음이 올라가도 입 모양은 그대로. 반음씩 올라간다.', cue:['마ㅡ 따라가기','같은 입 모양','목이 조이면 립트릴로'], play:'up'},
   arp:{t:'분산화음 · 도약', d:'도미솔도솔미도', how:'음 사이가 넓다. 높은 음으로 뛸 때 소리를 키우지 말고 배를 붙잡는다.', cue:['도 미 솔 도','솔 미 도','부드럽게 연결'], play:'arp'},
   read:{t:'낭독 · 전달', d:'끊어 읽기와 문장 끝', how:'한 문장을 읽는다. 쉴 곳에서 확실히 쉬고, 핵심 단어 하나만 조금 높고 길게. 문장 끝은 내려서 닫는다.', cue:['"핵심은 세 가지입니다 // 첫째 준비 / 둘째 연습 / 셋째 기록입니다"','한 번 더, 강조 단어 바꿔서']},
+  proj:{t:'프로젝션 · 받쳐서 크게', d:'"허—"로 시작해 3m 거리까지', how:'한숨처럼 "허—"로 시작해 배로 받치며 소리를 키운다. 목·어깨는 그대로. 3m 앞 사람에게 말하듯 문장 하나.', cue:['허ㅡ (작게 시작)','허ㅡ (배로 받쳐 키우기)','"안녕하세요, 조인서입니다" 3m 앞으로','문장 끝 내리기']},
+  tone:{t:'편한 음 · 문장 끝', d:'음-흠 높이에서 말 시작', how:'"음-흠" 3번으로 편한 높이를 찾고, 그 높이에서 문장을 시작해 끝을 내려 닫는다.', cue:['음ㅡ흠 (자연스럽게)','"저는 ○○입니다↘"','"첫째, ○○입니다↘"','다음 문장 첫 단어만 살짝 ↗']},
   cool:{t:'쿨다운 허밍', d:'낮은 음 허밍으로 성대 진정', how:'편한 낮은 음에서 "음ㅡ" 부드럽게. 소리는 작게, 숨은 길게.', cue:['음ㅡ (작게)','음ㅡ (더 길게)']},
 };
 const MODES = {
   basic:{lead:'하루 10분. 숨 → 성대 → 울림 → 조음 → 전달 순서대로. 매일 짧게가 몰아서 길게보다 남는다.', steps:[['breath',90],['trill',90],['hum',90],['vowel',90],['twist',120],['read',120]]},
   sing:{lead:'찬양 부르기 전 워밍업. 성대를 풀고 음역을 열고 모음을 통일한다.', steps:[['breath',60],['trill',60],['hum',60],['scale',90],['arp',60],['cool',30]]},
   talk:{lead:'발표·대표기도·봉독 3분 전. 숨 잡고, 성대 풀고, 입 크게, 혀 빠르게.', steps:[['breath',45],['trill',45],['vowel',45],['twist',45]]},
+  interview:{lead:'면접 4분 전. 숨을 내리고, 성대를 풀고, 편한 음을 잡고, 받쳐서 크게. 첫 문장은 느리게.', steps:[['breath',60],['trill',45],['hum',45],['tone',45],['proj',45]]},
+  chat:{lead:'사람 만나기 2분 전. 목 풀고 편한 음 잡기. 소리는 앞으로, 끝은 아래로.', steps:[['breath',30],['hum',45],['tone',45]]},
   rand:{lead:'ENTP 전용. 호흡은 고정, 나머지는 매번 섞인다. 같은 루틴에 질릴 틈이 없다.', steps:null},
 };
 function buildSteps(mode){
   if(mode!=='rand') return MODES[mode].steps.map(([k,s])=>Object.assign({sec:s},STEP[k]));
-  const pool=['trill','hum','vowel','twist','scale','arp','read']; const pick=[]; while(pick.length<5){ const k=rnd(pool); if(!pick.includes(k)) pick.push(k); }
+  const pool=['trill','hum','vowel','twist','scale','arp','read','proj','tone']; const pick=[]; while(pick.length<5){ const k=rnd(pool); if(!pick.includes(k)) pick.push(k); }
   return [['breath',60],...pick.map(k=>[k,72])].map(([k,s])=>Object.assign({sec:s},STEP[k]));
 }
 const CHALLENGES = [
@@ -433,6 +487,10 @@ const CHALLENGES = [
   {id:'pray', ic:'🙏', t:'기도문 끊어읽기 설계 후 낭독', d:'전달 탭 · 쉼·강조 표시하고 녹음', tab:'talk'},
   {id:'tune', ic:'🎹', t:'튜너 초록 3초 × 3음', d:'노래 탭 · 세 가지 음에서 각각 3초 유지', tab:'sing'},
   {id:'pen', ic:'✏️', t:'펜 물고 60초 낭독', d:'전달 탭 · 빼고 비교 녹음', tab:'talk'},
+  {id:'proj', ic:'📣', t:'성량 프로젝션 70점 이상', d:'전달 탭 · 회의·면접 구간에서 20초', tab:'talk'},
+  {id:'tone', ic:'🎚', t:'대화 톤 측정', d:'전달 탭 · 허밍 음과 말소리 음 비교', tab:'talk'},
+  {id:'interview', ic:'🎤', t:'면접 답변 하나 녹음', d:'전달 탭 · 질문 뽑고 60초 답변', tab:'talk'},
+  {id:'sz', ic:'🩺', t:'s/z 비율 측정', d:'도구 탭 · 목 상태 점검', tab:'tools'},
   {id:'dict', ic:'✍️', t:'받아쓰기 95% 이상', d:'전달 탭 · 인터넷 필요', tab:'talk'},
 ];
 const METHODS = {
@@ -448,7 +506,27 @@ const METHODS = {
   {t:'사이렌 · 파사지오(전환) 다듬기', how:['립트릴 사이렌으로 낮은 음↔높은 음을 경계 없이.','뒤집히는 지점(보통 D4~F4 근처)에서 소리를 작게, 숨은 그대로.','"우" 모음으로 사이렌하면 전환이 쉽다.'], why:'낮은 음은 성대가 두껍게, 높은 음은 얇게 진동한다. 그 전환 구간에서 근육이 급히 바뀌며 소리가 뒤집히거나 깨진다. 사이렌은 이 전환을 수백 번 부드럽게 지나가게 만들어 후렴 높은 음에서 소리를 지르지 않게 한다.', tool:'노래 › 사이렌'},
   {t:'음 잡기 · 첫 음 반응', how:['전주 마지막 화음을 듣고 첫 음을 속으로 먼저 부른다(내청).','음정 게임으로 "듣고 → 바로 내기" 반응을 훈련.','한 곡의 첫 음을 튜너로 확인하고 외운다.'], why:'노래를 잘 부르는 사람은 소리를 내기 전에 머릿속에서 먼저 듣는다. 이 내청이 정확하면 성대가 그 음에 맞게 미리 준비된다. 게임의 짧은 제한 시간은 이 준비 속도를 올린다.', tool:'노래 › 음정 게임'},
   {t:'찬양 한 곡 잡는 순서', how:['① 가사를 박에 맞춰 말로만 읽는다(리듬).','② 한 모음으로 멜로디만(음정).','③ 가사를 붙인다. 한 절 녹음해서 듣는다.','④ 어려운 두 마디만 따로 열 번.'], why:'리듬·음정·가사를 한꺼번에 하면 뇌가 셋 다 놓친다. 하나씩 자동화한 뒤 합치면 각각의 정확도가 유지된다. 운동 학습의 부분 연습 원리.', tool:'노래 › 메트로놈'},
+  {t:'고음에 다가가는 법', how:['높은 음일수록 소리를 작게 시작한다. 크게 내려는 순간 목이 밀린다.','입은 옆이 아니라 위아래로(하품 자세). 혀끝은 아랫니 뒤에.','후두를 낮게 유지: 하품 직전의 목 느낌. 목젖(후두)이 올라가면 소리가 얇아진다.','"우" 모음으로 사이렌 올라간 뒤 같은 자리에 가사 모음을 얹는다.'], why:'고음은 힘이 아니라 성대가 얇아지며 늘어나는 것이다. 목이나 턱에 힘을 주면 늘어날 공간이 없어져 갈라진다. 작게 시작해 공명으로 키우는 것이 유일하게 오래 가는 방법이다.', tool:'노래 › 음계 플레이어 (반음씩 올리기)'},
+  {t:'믹스보이스 · 흉성과 두성 잇기', how:['낮은 음에서 "허밍 → 마"로 두성 자리(코 위)를 잡는다.','그 울림 자리를 유지한 채 음을 내려온다. 낮아져도 소리를 가슴으로 떨어뜨리지 않는다.','반대로 흉성으로 시작해 올라갈 땐 소리를 점점 작고 앞쪽으로 보낸다.','전환 구간(D4~F4)을 사이렌으로 하루 20번.'], why:'흉성은 성대가 두껍게, 두성은 얇게 진동하는 상태다. 믹스는 둘을 급격히 바꾸지 않고 비율을 서서히 옮기는 것. 울림 자리를 고정하면 근육이 그 전환을 매끄럽게 학습한다.', tool:'노래 › 사이렌'},
+  {t:'프레이징 · 숨 자리 정하기', how:['악보나 가사에 숨 쉴 자리(V)를 미리 표시한다. 문장 뜻이 끊기는 곳.','긴 프레이즈 앞에서는 미리 깊게, 짧은 프레이즈 앞은 얕게. 숨은 소리 없이 코+입으로.','프레이즈 끝음은 흘리지 말고 정리한다. 다음 숨이 제때 들어온다.','한 절을 한 모음으로 불러서 숨 자리가 맞는지 확인.'], why:'숨이 모자라서 음이 처지는 건 호흡량 문제가 아니라 숨 자리 설계 문제인 경우가 대부분이다. 회중 찬양은 템포가 정해져 있으니 즉흥으로 숨 쉬면 늘 늦는다.', tool:'전달 › 끊어읽기 설계'},
+  {t:'가사가 들리게 부르기', how:['모음은 길게, 자음은 짧고 또렷하게. 노래는 모음 위에 자음을 얹는 것.','받침은 음 끝에 붙인다: "주" 를 길게 → 마지막에 "님". "주니임"이 아니라 "주ㅡ님".','ㅎ·ㅅ·ㅊ·ㅍ 같은 무성 자음은 박자 직전에 미리 낸다(선행 자음).','한 절을 말로 읽고 → 리듬 붙이고 → 음 붙이기.'], why:'노래에서 가사가 안 들리는 건 대개 자음이 늦거나 약해서다. 무성 자음은 소리가 없어 박자 안에 넣으면 모음이 늦어진다. 미리 내면 모음이 정박에 떨어져 가사와 리듬이 동시에 산다.', tool:'노래 › 메트로놈'},
+  {t:'키가 안 맞을 때 · 화음 · 마이크', how:['키가 높으면 옥타브를 내리거나, 후렴만 원키로 올라간다. 무리해서 소리 지르지 않는다.','옆 사람과 음이 다를 땐 내 음을 밀지 말고 반주 베이스를 듣는다.','찬양팀 마이크: 입에서 5~10cm, 큰 음은 살짝 떼고, 작은 음은 붙인다. 마이크가 성량을 대신하게 두고 성대는 아낀다.','예배 전 리허설이 곧 워밍업이다. 첫 곡부터 전력으로 가지 않는다.'], why:'회중 찬양의 목적은 함께 부르는 것이지 솔로가 아니다. 음역 밖의 음을 억지로 내면 성대가 먼저 상하고 다음 주가 없다. 마이크는 소리를 키우는 도구이므로 성대를 쉬게 하는 데 써야 한다.', tool:'노래 › 음역대 테스트'},
   {t:'회중 찬양에서 잘 들리게', how:['옆 사람보다 크게가 아니라 <b>앞으로</b>. 마스크 공명으로.','가사의 첫 자음을 또렷하게(특히 ㅎ, ㅅ, ㅊ).','긴 음 끝에서 음을 흘리지 말고 딱 멈춘다.'], why:'회중 안에서 묻히지 않는 소리는 큰 소리가 아니라 배음이 앞쪽에 있는 소리다. 자음이 살아야 가사가 전달되고, 음 끝을 정리해야 다음 프레이즈 숨이 제때 들어온다.', tool:'도구 › 녹음'},
+ ],
+ talkpro:[
+  {t:'큰 소리는 "밀기"가 아니라 "받치기"', how:['배·옆구리로 숨을 채우고, 소리를 낼 때 배가 서서히 버티며 들어가게(지지).','목·어깨·턱에 힘이 들어가면 그건 밀기다. 손을 목에 대고 말해 보고 근육이 튀면 다시.','"허—" 하고 한숨처럼 시작한 소리를 그대로 키운다. 시작이 부드러워야 크게 내도 안 아프다.','성량 프로젝션 도구에서 "회의·면접" 구간에 20초 머물기.'], why:'성량은 성대를 세게 부딪혀서가 아니라 성대 아래 공기 압력을 안정되게 올려서 나온다. 목으로 밀면 성대 접촉이 과해져 30분이면 쉰다. 호흡으로 받치면 같은 크기를 두 시간도 유지한다. 면접장에서 목소리가 작아지는 건 자신감이 아니라 숨이 얕아진 탓이 대부분이다.', tool:'전달 › 성량 프로젝션'},
+  {t:'편한 대화 음(최적 음높이) 찾기', how:['"음-흠"(동의할 때 내는 소리)을 자연스럽게 3번. 그 음이 네 편한 말소리 높이의 근처다.','그 높이에서 문장을 시작한다. 긴장하면 3~5반음 올라가는데, 그러면 목이 조이고 얇게 들린다.','대화 톤 도구로 허밍 음과 말할 때 음을 비교한다. 차이 ±2반음 안이 목표.'], why:'사람마다 성대 길이에 맞는 편한 진동수가 있다. 그보다 높게 말하면 후두가 올라가고 인두 공간이 좁아져 소리가 얇고 날카롭게, 힘은 두 배로 든다. 낮고 편한 음은 울림이 커서 작게 말해도 멀리 간다. 면접관에게 "차분하다"로 들리는 건 대부분 이 높이다.', tool:'전달 › 대화 톤'},
+  {t:'상대가 듣기 편한 소리의 세 조건', how:['① 앞쪽 울림: 마스크 공명. 목 뒤로 삼키지 않는다.','② 자음이 산다: 특히 문장 첫 자음과 받침. "감사합니다"의 ㄱ·ㅁ·ㅂ·ㄷ.','③ 끝이 내려간다: 문장 끝 하강. 올리면 자신 없거나 묻는 것처럼 들린다.','거리에 따라 소리를 키우지 말고 자음과 쉼을 키운다. 1m·3m·10m 모드로 연습.'], why:'청자의 귀는 음량보다 명료도(2~4kHz 배음과 자음 에너지)에 반응한다. 같은 dB라도 앞쪽 울림에 자음이 살아 있으면 "또렷하다", 목 뒤 소리에 자음이 죽으면 "웅얼거린다"로 들린다. 소리를 키워서 해결하려 들면 듣는 사람은 피로해지고 말하는 사람은 목이 쉰다.', tool:'전달 › 성량 프로젝션 · 끊어읽기'},
+  {t:'면접 답변의 소리 설계', how:['첫 문장은 평소의 80% 속도로. 귀를 맞추는 시간을 준다.','결론 → 이유 → 예시 순. 한 문장에 생각 하나. 문장이 길어지면 끝을 못 내린다.','핵심 단어 하나만 조금 높고 길게. "저는 <b>끈기</b>가 강점입니다."','문장 끝은 내려서 닫는다. "…입니다↘". 다음 문장 첫 단어를 살짝 올려 시작.','답이 끝나면 입을 닫고 기다린다. 덧붙이지 않는다.'], why:'면접관은 내용의 절반을 소리로 판단한다. 첫 문장의 속도가 "준비된 사람"을, 끝 하강이 "확신"을, 쉼이 "생각하며 말하는 사람"을 만든다. 같은 답이라도 신호가 없으면 외운 것처럼 들린다.', tool:'전달 › 면접 답변 연습'},
+  {t:'긴장했을 때 목소리 되찾기', how:['입장 직전: 코로 4초 들이마시고 6초 내쉬기 3회. 내쉴 때 어깨를 떨어뜨린다.','대기 중: 입 다물고 허밍 "음—" 낮게 (안 들리게). 성대가 풀리고 마스크 위치가 잡힌다.','물 한 모금. 성대는 젖어 있어야 부드럽게 붙는다.','첫 답변 전에 속으로 한 박자 쉬고 시작한다.'], why:'긴장하면 호흡이 가슴 위로 올라가고 후두가 올라간다. 긴 날숨은 부교감신경을 켜서 이 둘을 되돌린다. 허밍은 SOVT 효과로 성대 접촉을 가볍게 만들어 첫 소리가 갈라지는 걸 막는다.', tool:'루틴 › 면접 전 4분'},
+  {t:'자세와 마이크', how:['서 있을 때: 발 어깨너비, 무릎 잠그지 않게, 가슴은 열되 어깨는 내린다.','앉을 때: 등받이에 기대지 않고 골반을 세운다. 배가 접히면 숨이 짧아진다.','턱은 살짝 당긴다. 턱을 들면 후두가 당겨 올라가 소리가 얇아진다.','마이크는 입에서 주먹 하나, 각도는 턱 쪽으로. 파열음 팝 소리를 줄인다.'], why:'횡격막은 골반과 흉곽 사이에서 일한다. 구부정하면 가동 범위가 줄어 숨이 얕아지고 목으로 보상한다. 자세 하나로 성량이 20%는 달라진다.', tool:'전달 › 성량 프로젝션'},
+ ],
+ care:[
+  {t:'물 · 습기 · 카페인', how:['하루 1.5~2L. 성대에 닿는 건 마신 물이 아니라 몸 전체 수분이라, 말하기 2시간 전부터 마셔 둔다.','건조한 날엔 뜨거운 물 김 쐬기(스팀) 5분. 마스크 착용도 습도 유지에 도움.','카페인·술은 이뇨 작용으로 성대를 말린다. 중요한 날엔 줄인다.'], why:'성대는 점막이다. 마르면 진동에 더 많은 압력이 필요해지고, 그 압력이 성대를 붓게 한다. 붓기는 쉰 소리와 고음 손실로 나타난다.', tool:'도구 › 목 상태 체크'},
+  {t:'헛기침 · 속삭임 · 소리 지르기', how:['헛기침 대신 침을 삼키거나 물을 마신다. 정 안 되면 "흠" 허밍으로 푼다.','속삭임은 쉬는 게 아니다. 성대가 어중간하게 벌어진 채 힘을 쓴다. 목 아픈 날은 작게 말하거나 아예 말하지 않는다.','시끄러운 곳(식당·버스)에선 소리를 키우지 말고 마스크 공명+자음으로 뚫는다.'], why:'헛기침 한 번은 성대를 세게 부딪히는 충격이다. 하루 수십 번이면 미세 손상이 쌓인다. 속삭임은 성대 뒤쪽이 벌어진 채 앞쪽만 마찰해 오히려 더 피로하다.', tool:'훈련법 › 대화·면접'},
+  {t:'워밍업 · 쿨다운은 필수', how:['말하기·노래 전 2분: 호흡 + 립트릴 + 허밍.','끝난 뒤 1분: 낮은 허밍, 립트릴 내려오기. 성대 붓기를 가라앉힌다.','하루 발성 총량을 생각한다. 찬양 연습 + 수업 발표 + 친구와 3시간 수다 = 운동선수의 연장전.'], why:'성대 근육도 근육이다. 준비 없이 강한 접촉을 시작하면 미세 손상이, 갑자기 끝내면 부종이 남는다. 쿨다운은 혈류를 정상으로 돌려 다음 날 컨디션을 만든다.', tool:'루틴'},
+  {t:'s/z 비율 · 목 상태 자가 점검', how:['"스—"를 최대한 길게, 다음 "즈—"를 최대한 길게. 각각 3번 중 최고값.','s ÷ z 비율이 1.2 이하면 정상, 1.4를 넘으면 성대 접촉이 새고 있다는 신호.','비율이 높은 날은 소리 훈련을 빼고 호흡·빨대만. 2주 넘게 계속되면 이비인후과.','아침에 쉰 소리, 높은 음 손실, 말끝 갈라짐, 목 이물감이 이틀 이상이면 쉬는 날.'], why:'"스"는 성대 없이 호흡만으로, "즈"는 같은 호흡에 성대 진동을 더한 소리다. 성대가 잘 닫히면 둘의 길이가 비슷하다. 성대가 붓거나 결절이 있으면 "즈"에서 공기가 새어 짧아진다. 음성치료에서 쓰는 간단한 선별 검사다.', tool:'도구 › 목 상태 체크'},
+  {t:'역류 · 수면 · 회복', how:['자기 전 3시간은 먹지 않는다. 위산 역류가 아침 쉰 소리의 흔한 원인.','잠은 7시간. 성대 점막은 자는 동안 회복된다.','목이 아프면 "진통제 먹고 노래"는 금지. 통증은 멈추라는 신호다.','회복 순서: 침묵 → 허밍 → 립트릴 → 작은 소리 → 평소.'], why:'위산은 성대 뒤쪽에 닿아 붓기와 이물감을 만든다. 수면 부족은 점막 회복을 막고, 진통제는 손상 신호를 가려서 더 큰 손상을 부른다.', tool:'도구 › 목 상태 체크'},
  ],
  talk:[
   {t:'모음 과장 · 턱 풀기', how:['거울 앞에서 "아 에 이 오 우"를 두 배 크게. 턱은 아래로만.','턱 관절 마사지, 하품하듯 크게 벌렸다 놓기.','펜을 앞니로 물고 읽기 1분 → 빼고 같은 문장.'], why:'한국어 명료도의 절반은 모음이 정확히 벌어지는가에서 갈린다. 턱이 굳으면 "아/어", "오/우"가 뭉개져 웅얼거림이 된다. 펜 물기는 조음 근육 저항 훈련이다.', tool:'전달 › 과장 조음 드릴'},
@@ -464,12 +542,14 @@ const SPEED_SAMPLE = '여호와는 나의 목자시니 내게 부족함이 없�
 
 // ---------- state ----------
 const KEY='speech-studio-v1';
-let S={days:[], scores:[], sus:[], best:0, range:[], game:[], speed:[], ch:{}, tt:{}, script:'', marks:{}, theme:'dark', updatedAt:0};
+let S={days:[], scores:[], sus:[], best:0, range:[], game:[], speed:[], ch:{}, tt:{}, script:'', marks:{}, theme:'dark', proj:[], sz:[], iv:[], care:{}, tone:0, updatedAt:0};
 try{ const r=localStorage.getItem(KEY); if(r) S=Object.assign(S,JSON.parse(r)); }catch(e){}
+['proj','sz','iv'].forEach(k=>{ if(!Array.isArray(S[k])) S[k]=[]; }); S.care=S.care||{};
 let db=null, docRef=null, wT=null, applying=false;
 function persist(){ S.updatedAt=Date.now(); try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} if(docRef&&!applying){ clearTimeout(wT); wT=setTimeout(async()=>{ try{ await docRef.set(JSON.parse(JSON.stringify(S))); $('syncMsg').textContent='클라우드에 동기화됨'; }catch(e){ $('syncMsg').textContent='이 기기에 저장됨 (동기화 실패)'; } },600);} }
 (async()=>{ try{ db=await (window.claude?.use?.('db')??Promise.resolve(null)); if(!db) return; docRef=db.doc('state/main'); const s=await docRef.get(); if(s.exists){ const r=s.data(); if((r.updatedAt||0)>(S.updatedAt||0)){ applying=true; S=Object.assign(S,r); try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} renderAll(); applying=false; } else if((S.updatedAt||0)>(r.updatedAt||0)) persist(); } else persist(); $('syncMsg').textContent='클라우드에 동기화됨'; docRef.onSnapshot(sn=>{ if(!sn.exists||sn.metadata.hasPendingWrites) return; const r=sn.data(); if((r.updatedAt||0)>(S.updatedAt||0)){ applying=true; S=Object.assign(S,r); renderAll(); applying=false; } },()=>{}); }catch(e){} })();
-function renderAll(){ renderLog(); renderChallenge(); renderScript(); applyTheme(); }
+function ensureS(){ ['proj','sz','iv'].forEach(k=>{ if(!Array.isArray(S[k])) S[k]=[]; }); S.care=S.care||{}; }
+function renderAll(){ ensureS(); renderLog(); renderChallenge(); renderScript(); applyTheme(); }
 
 // theme
 function applyTheme(){ document.documentElement.setAttribute('data-theme', S.theme||'dark'); document.querySelectorAll('#themeSeg button').forEach(b=>b.classList.toggle('on',b.dataset.th===(S.theme||'dark'))); }
@@ -641,6 +721,46 @@ $('dictBtn').onclick=()=>{ if(listening){ rec.stop(); return; } if(!navigator.on
 const norm=s=>s.replace(/[\s.,!?~·'"‘’“”]/g,'');
 function grade(target,heard){ const a=norm(target), b=norm(heard); const n=a.length,m=b.length; const dp=Array.from({length:n+1},()=>new Uint16Array(m+1)); for(let i=n-1;i>=0;i--) for(let j=m-1;j>=0;j--) dp[i][j]= a[i]===b[j]? dp[i+1][j+1]+1 : Math.max(dp[i+1][j],dp[i][j+1]); let i=0,j=0,html='',ok=0; const src=target.replace(/\s+/g,' '); const mark={}; while(i<n&&j<m){ if(a[i]===b[j]){ mark[i]=true; ok++; i++; j++; } else if(dp[i+1][j]>=dp[i][j+1]) i++; else j++; } let k=0; for(const ch of src){ if(/[\s.,!?~·'"‘’“”]/.test(ch)){ html+=ch; continue; } html+=`<span class="${mark[k]?'ok':'bad'}">${ch}</span>`; k++; } const pct=Math.round(ok/Math.max(1,n)*100); $('diff').innerHTML=html+`<div style="font-size:13px;color:var(--muted);margin-top:6px">들린 대로: ${heard}</div>`; $('score').innerHTML=pct+'%<small>정확도</small>'; $('scoreNote').textContent= pct>=95?'거의 완벽. 속도를 조금 올려보자.': pct>=85?'빨간 글자만 느리게 다시 세 번.':'문장을 반으로 나눠 느리게. 받침과 모음 벌림을 확인.'; $('dictHint').textContent=''; S.scores.unshift({d:todayKey(),s:target.slice(0,18),p:pct}); S.scores=S.scores.slice(0,60); if(pct>S.best) S.best=pct; persist(); if(pct>=95) autoChallenge('dict'); renderLog(); }
 
+
+// ---------- projection ----------
+const PJ_BANDS={1:[35,62],3:[52,78],10:[68,92]}; const PJ_TXT=['안녕하세요, 조인서입니다. 오늘 이 자리에 설 수 있어서 감사합니다. 저는 세 가지를 말씀드리겠습니다.','제 강점은 끈기입니다. 한번 시작한 일은 결과가 나올 때까지 붙잡습니다. 예를 들어 작년에는 매일 턱걸이를 기록하며 석 달을 이어 갔습니다.','여호와는 나의 목자시니 내게 부족함이 없으리로다. 그가 나를 푸른 풀밭에 누이시며 쉴 만한 물가로 인도하시는도다.','오늘 회의의 결론부터 말씀드리면, 일정은 그대로 두고 범위를 줄이는 쪽이 맞습니다. 이유는 두 가지입니다.'];
+let pjMode=1, pj=null;
+function pjBand(){ const [lo,hi]=PJ_BANDS[pjMode]; $('pjBand').style.left=lo+'%'; $('pjBand').style.width=(hi-lo)+'%'; }
+seg('pjSeg', d=>{ pjMode=+d.pj; pjBand(); }); pjBand();
+$('pjNew').onclick=()=>{ $('pjText').textContent=rnd(PJ_TXT); };
+$('pjStart').onclick=async()=>{ if(pj){ pjEnd(); return; } if(!await needMic()) return; pj={t0:performance.now(),inb:0,voiced:0,lo:0,hi:0}; $('pjStart').textContent='■ 멈춤'; $('pjScore').textContent='…'; pj.tk=setInterval(()=>{ const left=Math.max(0,20-(performance.now()-pj.t0)/1000); $('pjTime').textContent=Math.ceil(left)+'s'; if(left<=0) pjEnd(); },100); };
+Mic.subs.add(({pct})=>{ if(!pj) return; $('pjFill').style.width=pct+'%'; if(pct<15) return; pj.voiced++; const [lo,hi]=PJ_BANDS[pjMode]; if(pct>=lo&&pct<=hi) pj.inb++; else if(pct<lo) pj.lo++; else pj.hi++; });
+function pjEnd(){ clearInterval(pj.tk); const sc=pj.voiced?Math.round(pj.inb/pj.voiced*100):0; const lo=pj.voiced?Math.round(pj.lo/pj.voiced*100):0, hi=pj.voiced?Math.round(pj.hi/pj.voiced*100):0; pj=null; $('pjStart').textContent='▶ 20초 시작'; $('pjTime').textContent='20s'; $('pjScore').textContent=sc+'%'; $('pjLoHi').textContent=lo+'% / '+hi+'%'; $('pjNote').textContent= sc>=70?'좋다. 목이 편했다면 그게 정답. 다음 거리로.': lo>hi?'작다. 숨을 더 채우고 배로 받쳐라. 목으로 밀지 말고.':'크다. 소리를 줄이지 말고 자음과 쉼을 살려라. 같은 크기라도 또렷하면 편하게 들린다.'; S.proj.unshift({d:todayKey(),m:pjMode,s:sc}); S.proj=S.proj.slice(0,60); persist(); if(sc>=70) autoChallenge('proj'); renderLog(); }
+
+// ---------- conversation tone ----------
+let tn=null;
+function medianF(a){ if(!a.length) return 0; const s=a.slice().sort((x,y)=>x-y); return s[Math.floor(s.length/2)]; }
+async function tnRun(step,sec){ if(!await needMic()) return; tn={step,buf:[]}; const btn=$(step===1?'tnStep1':'tnStep2'); const orig=btn.textContent; let left=sec; btn.textContent='듣는 중 '+left+'s'; const tk=setInterval(()=>{ left--; btn.textContent='듣는 중 '+left+'s'; if(left<=0){ clearInterval(tk); btn.textContent=orig; const med=medianF(tn.buf); tn=null; if(!med){ $('tnNote').textContent='소리를 못 잡았다. 조금 더 크게.'; return; } if(step===1){ S.tone=med; persist(); $('tnBase').textContent=noteName(med); $('tnNote').textContent='편한 음 '+noteName(med)+' 저장. 이제 ②로 말소리를 재 보자.'; } else { $('tnTalk').textContent=noteName(med); if(S.tone){ const d=12*Math.log2(med/S.tone); $('tnDiff').textContent=(d>0?'+':'')+d.toFixed(1)+'반음'; $('tnNote').textContent= Math.abs(d)<=2?'편한 자리에서 말하고 있다. 이 높이를 기억해라.': d>2?'말소리가 '+d.toFixed(0)+'반음 높다. 긴장하거나 목을 조이는 중. 긴 날숨 3번, 허밍 후 다시.':'말소리가 눌려 있다. 소리를 앞(마스크)으로 보내고 턱을 살짝 당겨라.'; autoChallenge('tone'); } else $('tnNote').textContent='먼저 ①로 편한 허밍 음을 재 둬라.'; } } },1000); }
+Mic.subs.add(({f,pct})=>{ if(tn&&f>0&&pct>=20) tn.buf.push(f); });
+$('tnStep1').onclick=()=>tnRun(1,6); $('tnStep2').onclick=()=>tnRun(2,8);
+if(S.tone) $('tnBase').textContent=noteName(S.tone);
+
+// ---------- interview ----------
+const IV_Q=['1분 자기소개를 해 보세요.','이 학과(직무)에 지원한 이유는 무엇인가요?','본인의 강점과 약점을 하나씩 말해 보세요.','가장 힘들었던 경험과 그것을 어떻게 극복했는지 말해 보세요.','친구나 팀원과 갈등이 있었던 경험이 있나요? 어떻게 해결했나요?','10년 뒤 어떤 사람이 되어 있을 것 같나요?','최근에 읽은 책이나 관심 있게 본 주제가 있나요?','실패한 경험이 있다면 무엇을 배웠나요?','우리 학교(회사)가 왜 당신을 뽑아야 하나요?','존경하는 인물과 그 이유를 말해 보세요.','스트레스를 받을 때 어떻게 관리하나요?','다른 사람들이 당신을 어떻게 평가하나요?','신앙이 당신의 선택에 어떤 영향을 주나요?','마지막으로 하고 싶은 말이 있나요?'];
+let iv={q:'',checks:new Set(),tk:null};
+$('ivDraw').onclick=()=>{ iv.q=rnd(IV_Q); $('ivQ').textContent=iv.q; $('ivPhase').textContent='준비'; $('ivCheck').style.display='none'; iv.checks.clear(); document.querySelectorAll('[data-iv]').forEach(b=>b.classList.remove('on')); };
+$('ivStart').onclick=()=>{ if(!iv.q){ $('ivDraw').click(); } clearInterval(iv.tk); let left=30, phase='prep'; $('ivPhase').textContent='생각 30초'; Tone.click(true); iv.tk=setInterval(()=>{ left--; $('ivTime').textContent=left+'s'; if(left<=0){ if(phase==='prep'){ phase='ans'; left=60; $('ivPhase').textContent='답변 60초'; Tone.chime(); $('ivRec').click(); } else { clearInterval(iv.tk); $('ivPhase').textContent='채점'; Tone.click(true); if(recorder&&recorder.state==='recording') recorder.stop(); $('ivCheck').style.display='block'; } } },1000); };
+document.querySelectorAll('[data-iv]').forEach(b=>b.onclick=()=>{ const k=b.dataset.iv; if(iv.checks.has(k)){ iv.checks.delete(k); b.classList.remove('on'); } else { iv.checks.add(k); b.classList.add('on'); } });
+$('ivSave').onclick=()=>{ const sc=iv.checks.size; S.iv.unshift({d:todayKey(),q:iv.q.slice(0,16),s:sc}); S.iv=S.iv.slice(0,60); persist(); $('ivCheck').style.display='none'; $('ivPhase').textContent=sc+'/5 저장'; autoChallenge('interview'); renderLog(); if(sc>=3) Tone.chime(); };
+bindRec('ivRec','ivRecs','답변');
+
+// ---------- s/z ratio ----------
+let sz={s:0,z:0,run:null};
+async function szRun(which){ if(!await needMic()) return; sz.run={which,started:0,last:0,best:0}; $('szNote').textContent='숨을 채우고 "'+(which==='s'?'스':'즈')+'—" 최대한 길게.'; }
+Mic.subs.add(({pct,now})=>{ const r=sz.run; if(!r) return; if(pct>=25){ if(!r.started) r.started=now; r.last=now; const d=(now-r.started)/1000; if(d>r.best) r.best=d; $(r.which==='s'?'szS':'szZ').textContent=d.toFixed(1)+'s'; } else if(r.started&&now-r.last>1000){ const v=Math.round(r.best*10)/10; sz[r.which]=Math.max(sz[r.which],v); $(r.which==='s'?'szS':'szZ').textContent=sz[r.which].toFixed(1)+'s'; sz.run=null; $('szNote').textContent=(r.which==='s'?'스':'즈')+' '+v+'초. '+(r.which==='s'?'이제 ② 즈—.':'비율을 본다.'); szCalc(); } });
+function szCalc(){ if(!sz.s||!sz.z) return; const r=Math.round(sz.s/sz.z*100)/100; $('szR').textContent=r; const v= r<=1.2?'정상 범위':r<=1.4?'관찰 · 오늘은 가볍게':'성대 접촉 약함 · 소리 훈련 쉬기'; $('szV').textContent=v; S.sz.unshift({d:todayKey(),s:sz.s,z:sz.z,r}); S.sz=S.sz.slice(0,60); persist(); autoChallenge('sz'); renderLog(); }
+$('szS1').onclick=()=>szRun('s'); $('szS2').onclick=()=>szRun('z'); $('szReset').onclick=()=>{ sz={s:0,z:0,run:null}; ['szS','szZ','szR','szV'].forEach(i=>$(i).textContent='–'); };
+// daily care
+function careToday(){ return S.care[todayKey()]||(S.care[todayKey()]={}); }
+function renderCare(){ const c=careToday(); document.querySelectorAll('[data-care]').forEach(b=>b.classList.toggle('on',!!c[b.dataset.care])); const bad=['hoarse','pain','high'].filter(k=>c[k]).length; let adv=''; if(c.pain) adv='통증이 있다. 오늘은 소리 훈련 없이 호흡·빨대 발성만. 속삭이지 말고, 물을 마시고, 진통제 먹고 노래하지 않는다. 이틀 넘게 가면 이비인후과.'; else if(bad>=2) adv='성대가 부었을 가능성. 워밍업 허밍·립트릴만 가볍게, 고음 훈련은 쉰다. 자기 전 3시간 공복, 물 2L.'; else if(bad===1) adv='가볍게. 루틴은 "찬양 전 6분"의 앞 세 단계만. 헛기침 대신 삼키기.'; else adv='상태 좋다. 대신 오늘 말을 많이 했다면 자기 전 쿨다운 허밍 1분.'; if(c.talkalot&&!c.pain) adv+=' 오늘 발성 총량이 많았다 — 쿨다운 필수.'; if(!c.water) adv+=' 물 체크가 아직이다.'; $('careAdvice').textContent=adv; }
+document.querySelectorAll('[data-care]').forEach(b=>b.onclick=()=>{ const c=careToday(); c[b.dataset.care]=!c[b.dataset.care]; persist(); renderCare(); });
+renderCare();
+
 // ---------- backup ----------
 $('bkCopy').onclick=async()=>{ const t=JSON.stringify(S); try{ await navigator.clipboard.writeText(t); $('syncMsg').textContent='백업을 복사했다. 메모 앱에 붙여 두자.'; }catch(e){ prompt('복사해서 보관:', t); } };
 $('bkPaste').onclick=()=>{ const t=prompt('백업 문자열을 붙여 넣는다'); if(!t) return; try{ const r=JSON.parse(t); if(!r||!Array.isArray(r.days)) throw 0; S=Object.assign(S,r); persist(); renderAll(); $('syncMsg').textContent='복원했다.'; }catch(e){ $('syncMsg').textContent='형식이 맞지 않는다.'; } };
@@ -649,7 +769,11 @@ $('bkPaste').onclick=()=>{ const t=prompt('백업 문자열을 붙여 넣는다'
 function renderLog(){ const days=new Set(S.days); const today=new Date(); const start=new Date(today); start.setDate(today.getDate()-((today.getDay()+6)%7)-21); let html=['월','화','수','목','금','토','일'].map(d=>'<div class="h">'+d+'</div>').join(''); for(let i=0;i<28;i++){ const d=new Date(start); d.setDate(start.getDate()+i); const k=keyOf(d); html+=`<div class="c ${days.has(k)?'on':''} ${k===todayKey()?'today':''} ${d>today?'future':''}">${d.getDate()}</div>`; } $('cal').innerHTML=html;
   let st=0; const d=new Date(); if(!days.has(todayKey())) d.setDate(d.getDate()-1); for(;;){ const k=keyOf(d); if(days.has(k)){ st++; d.setDate(d.getDate()-1); } else break; if(st>999) break; }
   $('stStreak').textContent=st; $('stDays').textContent=S.days.length; const chDone=Object.values(S.ch).filter(c=>c.done).length; $('chLog').textContent='완료한 도전 '+chDone+'개';
-  const r0=S.range[0]; $('stRange').textContent=r0?r0.lo+'–'+r0.hi:'–'; const gb=S.game.length?Math.max(...S.game.map(g=>g.s)):0; $('stGame').textContent=gb?gb+'/30':'–'; $('gmBest').textContent=gb?gb:'–';
+  const r0=S.range[0]; $('stRange').textContent=r0?r0.lo+'–'+r0.hi:'–'; const gb=S.game.length?Math.max(...S.game.map(g=>g.s)):0; $('stGame').textContent=gb?gb+'/30':'–'; $('gmBest').textContent=gb?gb:'–'; $('stProj').textContent=(S.proj||[]).length?Math.max(...S.proj.map(p=>p.s))+'%':'–';
+  $('projLog').innerHTML=(S.proj||[]).length?S.proj.slice(0,20).map(x=>`<tr><td class="mono">${x.d.slice(5)}</td><td>${x.m}m</td><td class="mono" style="text-align:right">${x.s}%</td></tr>`).join(''):'<tr><td colspan="3" class="empty">아직 없음</td></tr>';
+  $('szLog').innerHTML=(S.sz||[]).length?S.sz.slice(0,20).map(x=>`<tr><td class="mono">${x.d.slice(5)}</td><td class="mono">${x.s}s</td><td class="mono">${x.z}s</td><td class="mono" style="text-align:right">${x.r}</td></tr>`).join(''):'<tr><td colspan="4" class="empty">아직 없음</td></tr>';
+  $('ivLog').innerHTML=(S.iv||[]).length?S.iv.slice(0,20).map(x=>`<tr><td class="mono">${x.d.slice(5)}</td><td>${x.q}…</td><td class="mono" style="text-align:right">${x.s}</td></tr>`).join(''):'<tr><td colspan="3" class="empty">아직 없음</td></tr>';
+  const pb=(S.proj||[]).length?Math.max(...S.proj.map(p=>p.s)):0; $('pjBest').textContent=pb?pb+'%':'–'; const ivT=(S.iv||[]).filter(x=>x.d===todayKey()); $('ivAvg').textContent=ivT.length?(ivT.reduce((a,x)=>a+x.s,0)/ivT.length).toFixed(1)+'/5':'–';
   $('rangeLog').innerHTML=S.range.length?S.range.slice(0,20).map(x=>`<tr><td class="mono">${x.d.slice(5)}</td><td class="mono">${x.lo}</td><td class="mono">${x.hi}</td><td class="mono" style="text-align:right">${x.span}</td></tr>`).join(''):'<tr><td colspan="4" class="empty">아직 없음</td></tr>';
   $('gameLog').innerHTML=S.game.length?S.game.slice(0,20).map(x=>`<tr><td class="mono">${x.d.slice(5)}</td><td class="mono" style="text-align:right">${x.s}</td></tr>`).join(''):'<tr><td colspan="2" class="empty">아직 없음</td></tr>';
   $('speedLog').innerHTML=S.speed.length?S.speed.slice(0,20).map(x=>`<tr><td class="mono">${x.d.slice(5)}</td><td>${x.t}…</td><td class="mono" style="text-align:right">${x.r}</td></tr>`).join(''):'<tr><td colspan="3" class="empty">아직 없음</td></tr>';
