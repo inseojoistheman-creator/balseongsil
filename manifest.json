@@ -1,1 +1,1 @@
-{"name":"또박또박 발성실","short_name":"발성실","start_url":"./index.html","display":"standalone","background_color":"#f5f6f3","theme_color":"#0f766e","icons":[{"src":"icon-512.png","sizes":"512x512","type":"image/png"},{"src":"icon-180.png","sizes":"180x180","type":"image/png"}]}
+{"name": "또박또박 발성실", "short_name": "발성실", "start_url": "./index.html", "display": "standalone", "background_color": "#111417", "theme_color": "#111417", "icons": [{"src": "icon-512.png", "sizes": "512x512", "type": "image/png"}, {"src": "icon-180.png", "sizes": "180x180", "type": "image/png"}]}
