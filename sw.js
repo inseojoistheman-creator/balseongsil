@@ -1,7 +1,7 @@
-const CACHE='bal-v4';
+const CACHE='bal-v5';
 const CORE=["./index.html", "./manifest.json", "./icon-180.png", "./icon-512.png"];
 self.addEventListener('install',e=>{ e.waitUntil(caches.open(CACHE).then(async c=>{ for(const u of CORE){ try{ await c.add(u); }catch(err){} } self.skipWaiting(); })); });
-self.addEventListener('activate',e=>{ e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())); });
+self.addEventListener('activate',e=>{ e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('bal-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())); });
 self.addEventListener('fetch',e=>{
   const req=e.request; if(req.method!=='GET') return;
   const url=new URL(req.url);

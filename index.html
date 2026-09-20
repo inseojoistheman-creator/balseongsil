@@ -188,6 +188,16 @@ td{padding:6px;border-bottom:1px solid var(--line)}
 .sync{color:var(--faint);font-size:12px;text-align:center;margin-top:6px}
 .kbd{display:inline-block;border:1px solid var(--line2);border-radius:5px;padding:0 6px;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted)}
 @media (max-width:420px){ .wrap{padding:12px 12px 96px} h1{font-size:20px} .led b{font-size:19px} }
+.cs-total{display:flex;align-items:baseline;gap:10px;margin:14px 0 4px}.cs-total b{font-size:44px;line-height:1;color:var(--amber);font-variant-numeric:tabular-nums}.cs-total span{color:var(--muted);font-size:13px}
+.cs-row{display:grid;grid-template-columns:86px 1fr 38px;gap:10px;align-items:center;margin-top:8px;font-size:13.5px}
+.cs-row .bar2{height:8px;border-radius:4px;background:var(--panel2);overflow:hidden}.cs-row .bar2 i{display:block;height:100%;border-radius:4px;background:var(--green)}
+.cs-row .bar2 i.mid{background:var(--amber)}.cs-row .bar2 i.low{background:var(--red)}
+.cs-row .v{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.cs-fb{margin-top:12px;display:grid;gap:8px}
+.cs-fb div{padding:10px 12px;border-radius:8px;background:var(--panel2);border:1px solid var(--line);font-size:13.5px;line-height:1.65}
+.cs-fb div b{display:block;color:var(--amber);font-size:12px;letter-spacing:.06em;margin-bottom:2px}
+.cs-fb div.good b{color:var(--green)}
+.cs-facts{margin-top:10px;font-size:12.5px;color:var(--muted);line-height:1.8}
 </style>
 
 <div class="wrap">
@@ -241,6 +251,18 @@ td{padding:6px;border-bottom:1px solid var(--line)}
 
   <!-- ===== SING ===== -->
   <section class="page" id="p-sing">
+    <div class="rack">
+      <h2>노래 코치 · 부르면 분석한다 <span class="tag">오프라인</span></h2>
+      <p class="lead">아무 곡이나 30초 이상 부른다. 곡을 몰라도 판단할 수 있는 <b>보편 기준</b> — 음정이 반음 격자에 맞는지, 긴 음이 흔들리는지, 첫 음을 밑에서 끌어올리는지, 끝음이 처지는지, 숨 길이, 셈여림 — 으로 채점하고 다음 연습을 정해 준다.</p>
+      <div class="row"><label>곡</label><input type="text" id="csSong" placeholder="곡 제목 (선택)" maxlength="40" style="flex:1;min-width:140px"></div>
+      <canvas class="canvas" id="csCanvas" width="800" height="240"></canvas>
+      <div class="leds"><div class="led"><small>경과</small><b id="csTime">0:00</b></div><div class="led"><small>지금 음</small><b id="csNow">–</b></div><div class="led"><small>소리 낸 시간</small><b id="csVoiced">0s</b></div></div>
+      <div class="btnrow"><button class="btn primary" id="csStart">● 노래 시작</button><button class="btn ghost" id="csCopy" hidden>결과 복사 (Claude에게 붙여넣기용)</button></div>
+      <div class="tip">반주(MR)를 <b>스피커</b>로 틀면 반주 소리까지 음정으로 잡힌다. 반주는 이어폰으로 듣거나 무반주로 부른다. 폰은 입에서 한 뼘~두 뼘.</div>
+      <div id="csResult"></div>
+      <div id="csHistWrap" hidden><h3 style="margin:14px 0 6px;font-size:14px;color:var(--muted)">최근 기록</h3><table><thead><tr><th>날짜</th><th>곡</th><th style="text-align:right">종합</th><th style="text-align:right">음정</th><th style="text-align:right">안정</th><th style="text-align:right">끝음</th></tr></thead><tbody id="csHist"></tbody></table></div>
+      <div class="why"><b>WHY</b>잘 부르는 노래의 공통점은 곡과 상관없이 같다. 음의 중심을 정확히 짚고(음정), 긴 음을 흔들림 없이 붙들고(호흡 지지), 첫 음을 바로 때리고, 끝음을 끝까지 책임진다. 이 네 가지는 기계로 잴 수 있다. 가사 전달·감정·박자는 이 기능이 못 재니 녹음해서 직접 듣거나 찬양팀 동료에게 묻는다.</div>
+    </div>
     <div class="rack">
       <h2>튜너 · 음정 맞추기 <span class="tag">오프라인</span></h2>
       <p class="lead">건반을 누르면 기준음이 울린다. 따라 부르면 바늘이 움직인다. 가운데 초록 안(±15센트)에 3초 머물면 그 음은 내 것.</p>
@@ -550,8 +572,8 @@ try{ const r=localStorage.getItem(KEY); if(r) S=Object.assign(S,JSON.parse(r)); 
 let db=null, docRef=null, wT=null, applying=false;
 function persist(){ S.updatedAt=Date.now(); try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} if(docRef&&!applying){ clearTimeout(wT); wT=setTimeout(async()=>{ try{ await docRef.set(JSON.parse(JSON.stringify(S))); $('syncMsg').textContent='클라우드에 동기화됨'; }catch(e){ $('syncMsg').textContent='이 기기에 저장됨 (동기화 실패)'; } },600);} }
 (async()=>{ try{ db=await (window.claude?.use?.('db')??Promise.resolve(null)); if(!db) return; docRef=db.doc('state/main'); const s=await docRef.get(); if(s.exists){ const r=s.data(); if((r.updatedAt||0)>(S.updatedAt||0)){ applying=true; S=Object.assign(S,r); try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} renderAll(); applying=false; } else if((S.updatedAt||0)>(r.updatedAt||0)) persist(); } else persist(); $('syncMsg').textContent='클라우드에 동기화됨'; docRef.onSnapshot(sn=>{ if(!sn.exists||sn.metadata.hasPendingWrites) return; const r=sn.data(); if((r.updatedAt||0)>(S.updatedAt||0)){ applying=true; S=Object.assign(S,r); renderAll(); applying=false; } },()=>{}); }catch(e){} })();
-function ensureS(){ ['proj','sz','iv'].forEach(k=>{ if(!Array.isArray(S[k])) S[k]=[]; }); S.care=S.care||{}; }
-function renderAll(){ ensureS(); renderLog(); renderChallenge(); renderScript(); applyTheme(); }
+function ensureS(){ ['proj','sz','iv','coach'].forEach(k=>{ if(!Array.isArray(S[k])) S[k]=[]; }); S.care=S.care||{}; }
+function renderAll(){ ensureS(); csHist(); renderLog(); renderChallenge(); renderScript(); applyTheme(); }
 
 // theme
 function applyTheme(){ document.documentElement.setAttribute('data-theme', S.theme||'dark'); document.querySelectorAll('#themeSeg button').forEach(b=>b.classList.toggle('on',b.dataset.th===(S.theme||'dark'))); }
@@ -577,7 +599,7 @@ const Mic={ stream:null, an:null, buf:null, raf:0, subs:new Set(), on:false,
 };
 $('micBtn').onclick=()=>{ Mic.on?Mic.stop():Mic.start(); };
 async function needMic(){ if(Mic.on) return true; return await Mic.start(); }
-function pitch(b,sr){ let rms=0; for(let i=0;i<b.length;i++) rms+=b[i]*b[i]; rms=Math.sqrt(rms/b.length); if(rms<0.012) return -1; const SIZE=b.length; let best=-1,bestC=0; const minL=Math.floor(sr/600), maxL=Math.floor(sr/65); let e0=0; for(let i=0;i<SIZE;i++) e0+=b[i]*b[i]; e0/=SIZE; for(let lag=minL;lag<=maxL;lag++){ let c=0; for(let i=0;i<SIZE-lag;i+=2) c+=b[i]*b[i+lag]; c/=((SIZE-lag)/2); if(c>bestC){ bestC=c; best=lag; } } if(best<0||bestC/e0<0.5) return -1; // parabolic refine
+function pitch(b,sr){ let rms=0; for(let i=0;i<b.length;i++) rms+=b[i]*b[i]; rms=Math.sqrt(rms/b.length); if(rms<0.012) return -1; const SIZE=b.length; let best=-1,bestC=0; const minL=Math.floor(sr/600), maxL=Math.floor(sr/65); let e0=0; for(let i=0;i<SIZE;i++) e0+=b[i]*b[i]; e0/=SIZE; const cc=pitch._c&&pitch._c.length===maxL+2?pitch._c:(pitch._c=new Float32Array(maxL+2)); for(let lag=minL;lag<=maxL;lag++){ let c=0; for(let i=0;i<SIZE-lag;i+=2) c+=b[i]*b[i+lag]; c/=((SIZE-lag)/2); cc[lag]=c; if(c>bestC){ bestC=c; best=lag; } } if(best<0||bestC/e0<0.5) return -1; /* 옥타브 아래로 잘못 잡는 것 방지: 최댓값의 90% 이상인 봉우리 중 가장 짧은 주기를 고른다 */ for(let lag=minL+1;lag<best;lag++){ if(cc[lag]>=bestC*0.9&&cc[lag]>=cc[lag-1]&&cc[lag]>=cc[lag+1]){ best=lag; break; } } // parabolic refine
   let c0=0,c1=0,c2=0; for(let i=0;i<SIZE-best-1;i+=2){ c0+=b[i]*b[i+best-1]; c1+=b[i]*b[i+best]; c2+=b[i]*b[i+best+1]; } const den=(c0-2*c1+c2); const shift=den? 0.5*(c0-c2)/den : 0; return sr/(best+ (Math.abs(shift)<1?shift:0)); }
 const Tone={ osc:null, g:null, wave:'sine', vol:0.35, seq:0,
   play(f,dur,slideTo){ const c=ac(); this.stop(false); const o=c.createOscillator(), g=c.createGain(); o.type=this.wave; o.frequency.value=f; if(slideTo){ o.frequency.linearRampToValueAtTime(slideTo, c.currentTime+dur); } g.gain.setValueAtTime(0,c.currentTime); g.gain.linearRampToValueAtTime(this.vol,c.currentTime+0.02); o.connect(g).connect(c.destination); o.start(); if(dur){ g.gain.setValueAtTime(this.vol,c.currentTime+dur-0.05); g.gain.linearRampToValueAtTime(0,c.currentTime+dur); o.stop(c.currentTime+dur+0.02); } this.osc=o; this.g=g; },
@@ -599,6 +621,132 @@ const Seq={ timer:0, run:0,
   stop(){ this.run++; Tone.stop(); }
 };
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
+
+// ---------- 노래 코치: 분석 (순수 함수) ----------
+function csMedian(a){ if(!a.length) return NaN; const s=a.slice().sort((x,y)=>x-y), n=s.length; return n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2; }
+function csPct(a,p){ if(!a.length) return NaN; const s=a.slice().sort((x,y)=>x-y); return s[Math.min(s.length-1,Math.max(0,Math.round(p*(s.length-1))))]; }
+function csClamp(v){ return Math.max(0,Math.min(100,Math.round(v))); }
+function csLin(v,good,bad){ return csClamp(100*(1-(v-good)/(bad-good))); }   // good 이하=100, bad 이상=0
+function analyzeSing(fr){
+  // fr: [{t(ms), m(midi|NaN), db}]
+  const N=fr.length; if(N<30) return {ok:false};
+  // 1) 옥타브 튐 제거용 5점 중앙값
+  const m=fr.map(f=>f.m), sm=m.slice();
+  { let prev=NaN; for(let i=0;i<N;i++){ if(isNaN(m[i])) continue; if(!isNaN(prev)){ const d=m[i]-prev; if(Math.abs(Math.abs(d)-12)<0.6) m[i]-=Math.sign(d)*12; else if(Math.abs(Math.abs(d)-24)<0.6) m[i]-=Math.sign(d)*24; } prev=m[i]; } }
+  const sm0=m.slice(); for(let i=0;i<N;i++) sm[i]=sm0[i];
+  for(let i=2;i<N-2;i++){ const w=[m[i-2],m[i-1],m[i],m[i+1],m[i+2]].filter(v=>!isNaN(v)); if(!isNaN(m[i])&&w.length>=3) sm[i]=csMedian(w); }
+  // 2) 소리 구간(짧은 끊김 80ms는 잇는다)
+  const runs=[]; let s=-1, lastV=-1;
+  for(let i=0;i<N;i++){ const v=!isNaN(sm[i]); if(v){ if(s<0) s=i; else if(lastV>=0&&fr[i].t-fr[lastV].t>80&&i-lastV>1){ runs.push([s,lastV]); s=i; } lastV=i; } }
+  if(s>=0) runs.push([s,lastV]);
+  // 3) 음 나누기
+  const notes=[];
+  runs.forEach(([a,b],ri)=>{
+    let st=a, ref=[], out=0, outStart=-1;
+    const close=(e,afterSil)=>{ if(e>st) notes.push({a:st,b:e,run:ri,first:st===a,last:afterSil}); };
+    for(let i=a;i<=b;i++){ if(isNaN(sm[i])) continue;
+      const r=ref.length?ref.reduce((x,y)=>x+y,0)/ref.length:sm[i];
+      if(Math.abs(sm[i]-r)>0.6){ if(!out) outStart=i; out++; if(out>=4){ close(outStart-1,false); st=outStart; ref=[]; for(let j=outStart;j<=i;j++) if(!isNaN(sm[j])) ref.push(sm[j]); out=0; } }
+      else { out=0; ref.push(sm[i]); if(ref.length>12) ref.shift(); }
+    }
+    close(b,true);
+  });
+  const dur=n=>fr[n.b].t-fr[n.a].t;
+  const vals=(a,b)=>{ const o=[]; for(let i=a;i<=b;i++) if(!isNaN(sm[i])) o.push(sm[i]); return o; };
+  const idxAt=(n,ms)=>{ let i=n.a; while(i<n.b&&fr[i].t-fr[n.a].t<ms) i++; return i; };
+  const idxEnd=(n,ms)=>{ let i=n.b; while(i>n.a&&fr[n.b].t-fr[i].t<ms) i--; return i; };
+  const held=notes.filter(n=>dur(n)>=220);
+  held.forEach(n=>{ const d=dur(n); let ca=idxAt(n,d<400?d*0.25:120), cb=idxEnd(n,d<400?d*0.25:60); if(cb<=ca){ ca=n.a; cb=n.b; } n.ca=ca; n.cb=cb; n.d=d; n.c=csMedian(vals(ca,cb)); n.dev=(n.c-Math.round(n.c))*100; });
+  const voicedMs=runs.reduce((x,[a,b])=>x+(fr[b].t-fr[a].t),0);
+  if(held.length<8||voicedMs<12000) return {ok:false,notes:held.length,voicedSec:Math.round(voicedMs/1000)};
+  // 4) 음정: 내 기준(전체 치우침)을 빼고 본다
+  let sx=0,sy=0; held.forEach(n=>{ const ang=n.dev/100*2*Math.PI; sx+=Math.cos(ang)*n.d; sy+=Math.sin(ang)*n.d; });
+  const offset=(Math.hypot(sx,sy)/held.reduce((x,n)=>x+n.d,0)<0.3)?0:Math.atan2(sy,sx)/(2*Math.PI)*100;
+  const wrap=v=>((v+150)%100+100)%100-50;
+  let we=0,wd=0,lowN=0,highN=0; held.forEach(n=>{ n.res=wrap(n.dev-offset); we+=Math.abs(n.res)*n.d; wd+=n.d; if(n.res<-20) lowN++; if(n.res>20) highN++; });
+  const intonErr=we/wd;
+  // 5) 안정성 · 비브라토
+  let stabSum=0,stabN=0,vib=0,slow=0,fast=0,longN=0,vibRate=[],vibExt=[];
+  held.filter(n=>n.d>=500).forEach(n=>{ const xs=[],ts=[]; for(let i=n.ca;i<=n.cb;i++) if(!isNaN(sm[i])){ xs.push(sm[i]*100); ts.push(fr[i].t); } if(xs.length<8) return; longN++;
+    const tm=ts.reduce((x,y)=>x+y,0)/ts.length, xm=xs.reduce((x,y)=>x+y,0)/xs.length; let num=0,den=0; ts.forEach((t,i)=>{ num+=(t-tm)*(xs[i]-xm); den+=(t-tm)*(t-tm); }); const k=den?num/den:0;
+    const r=xs.map((x,i)=>x-xm-k*(ts[i]-tm)); const sd=Math.sqrt(r.reduce((x,y)=>x+y*y,0)/r.length);
+    const r3=r.map((v,i)=>(r[Math.max(0,i-1)]+v+r[Math.min(r.length-1,i+1)])/3); let zc=0; for(let i=1;i<r3.length;i++) if((r3[i-1]<0)!==(r3[i]<0)) zc++;
+    const rate=zc/2/((ts[ts.length-1]-ts[0])/1000);
+    if(n.d>=900&&rate>=4.3&&rate<=7.8&&sd>=12&&sd<=75){ vib++; vibRate.push(rate); vibExt.push(sd*1.41); }
+    else { stabSum+=sd; stabN++; if(sd>22){ if(rate<4.3) slow++; else fast++; } } });
+  const stabErr=stabN?stabSum/stabN:0;
+  // 6) 프레이즈 첫 음 · 끝음
+  const firsts=held.filter(n=>n.first&&n.d>=350); let scoopUp=0,scoopDn=0;
+  firsts.forEach(n=>{ const on=csMedian(vals(n.a,idxAt(n,90))); const sc=(n.c-on)*100; n.scoop=sc; if(sc>35) scoopUp++; else if(sc<-35) scoopDn++; });
+  const longs=held.filter(n=>n.d>=600); let driftSum=0,flatEnd=0;
+  longs.forEach(n=>{ const ta=idxAt(n,n.d*0.75), tb=idxEnd(n,40); const tail=csMedian(vals(ta,Math.max(ta,tb))); const dr=(tail-n.c)*100; n.drift=dr; driftSum+=Math.min(0,dr); if(dr<-20) flatEnd++; });
+  const endDrift=longs.length?driftSum/longs.length:0;
+  // 7) 프레이즈(숨)
+  const phr=[]; let ps=runs[0][0], pe=runs[0][1]; for(let i=1;i<runs.length;i++){ if(fr[runs[i][0]].t-fr[pe].t<350) pe=runs[i][1]; else { phr.push(fr[pe].t-fr[ps].t); ps=runs[i][0]; pe=runs[i][1]; } } phr.push(fr[pe].t-fr[ps].t);
+  const phrases=phr.filter(v=>v>=600), phMean=phrases.length?phrases.reduce((x,y)=>x+y,0)/phrases.length/1000:0, phMax=phrases.length?Math.max(...phrases)/1000:0;
+  // 8) 셈여림 · 음역
+  const dbs=fr.filter((f,i)=>!isNaN(sm[i])).map(f=>f.db), dyn=csPct(dbs,0.9)-csPct(dbs,0.1);
+  const cs=held.map(n=>n.c), lo=csPct(cs,0.05), hi=csPct(cs,0.95), mid=csMedian(cs);
+  const scores={ inton:csLin(intonErr,8,40), stab:stabN?csLin(stabErr,6,35):null, onset:firsts.length>=3?csLin((scoopUp+scoopDn)/firsts.length,0.05,0.6):null, end:longs.length>=3?csLin(-endDrift,5,40):null, breath:phrases.length>=3?csClamp(30+70*(phMean-1.5)/3.5):null };
+  const W={inton:.4,stab:.25,end:.15,onset:.1,breath:.1}; let ws=0,wt=0; Object.keys(W).forEach(k=>{ if(scores[k]!==null){ ws+=scores[k]*W[k]; wt+=W[k]; } });
+  return {ok:true, total:Math.round(ws/wt), scores, offset:Math.round(offset), intonErr:Math.round(intonErr), lowN, highN, heldN:held.length, stabErr:Math.round(stabErr), vib, longN, vibRate:vibRate.length?Math.round(csMedian(vibRate)*10)/10:0, vibExt:vibExt.length?Math.round(csMedian(vibExt)):0, slow, fast, scoopUp, scoopDn, firstN:firsts.length, endDrift:Math.round(endDrift), flatEnd, longCnt:longs.length, phMean:Math.round(phMean*10)/10, phMax:Math.round(phMax*10)/10, phN:phrases.length, dyn:Math.round(dyn), lo, hi, mid, voicedSec:Math.round(voicedMs/1000)};
+}
+
+// ---------- 노래 코치: 화면 ----------
+let cs=null, csLast=null;
+const name2m=nm=>{ const mm=/^([A-G]#?)(-?\d)$/.exec(nm||''); if(!mm) return NaN; return NAMES.indexOf(mm[1])+(+mm[2]+1)*12; };
+function csDraw(){
+  const c=$('csCanvas'), x=c.getContext('2d'), W=c.width, H=c.height, st=getComputedStyle(document.documentElement);
+  x.clearRect(0,0,W,H); x.fillStyle=st.getPropertyValue('--ledbg'); x.fillRect(0,0,W,H);
+  const fr=cs?cs.fr:(csLast||[]); if(!fr.length){ x.fillStyle=st.getPropertyValue('--faint'); x.font='22px sans-serif'; x.fillText('부르는 동안 음높이가 여기에 그려진다',24,H/2); return; }
+  const tEnd=fr[fr.length-1].t, span=cs?9000:Math.max(9000,tEnd-fr[0].t), t0=tEnd-span;
+  const vis=fr.filter(f=>f.t>=t0&&!isNaN(f.m)).map(f=>f.m); let lo=vis.length?Math.min(...vis):48, hi=vis.length?Math.max(...vis):60; lo=Math.floor(lo)-2; hi=Math.ceil(hi)+2; if(hi-lo<12){ const a=(12-(hi-lo))/2; lo-=Math.floor(a); hi+=Math.ceil(a); }
+  const Y=m=>H-(m-lo)/(hi-lo)*H, X=t=>(t-t0)/span*W;
+  for(let k=lo;k<=hi;k++){ const isC=((k%12)+12)%12===0; x.strokeStyle=st.getPropertyValue(isC?'--line2':'--line'); x.lineWidth=1; x.beginPath(); x.moveTo(0,Y(k)); x.lineTo(W,Y(k)); x.stroke(); if(isC||k===lo+1){ x.fillStyle=st.getPropertyValue('--faint'); x.font='18px monospace'; x.fillText(mName(k),6,Y(k)-4); } }
+  for(let i=1;i<fr.length;i++){ const a=fr[i-1], b=fr[i]; if(b.t<t0||isNaN(a.m)||isNaN(b.m)||Math.abs(a.m-b.m)>1.5) continue; const dev=Math.abs(b.m-Math.round(b.m))*100; x.strokeStyle=st.getPropertyValue(dev<=20?'--green':dev<=35?'--amber':'--red'); x.lineWidth=4; x.beginPath(); x.moveTo(X(a.t),Y(a.m)); x.lineTo(X(b.t),Y(b.m)); x.stroke(); }
+}
+Mic.subs.add(({f,pct,now,rms})=>{ if(!cs) return; const v=f>0&&pct>=22; const db=20*Math.log10(rms+1e-8); const t=now-cs.t0;
+  cs.fr.push({t,m:v?f2m(f):NaN,db}); if(v){ cs.voiced+=cs.lastT?Math.min(60,t-cs.lastT):16; $('csNow').textContent=noteName(f);
+    if((cs.n++%4)===0&&Mic.an){ const n=Mic.an.frequencyBinCount; cs.spec=cs.spec||new Float32Array(n); Mic.an.getFloatFrequencyData(cs.spec); const hz=AC.sampleRate/2/n; let all=0,ring=0; for(let i=Math.floor(80/hz);i<Math.min(n,Math.floor(4000/hz));i++){ const p=Math.pow(10,cs.spec[i]/10); all+=p; if(i*hz>=2000) ring+=p; } if(all>0){ cs.ring+=ring/all; cs.ringN++; } } }
+  cs.lastT=t; const sec=Math.floor(t/1000); $('csTime').textContent=Math.floor(sec/60)+':'+pad(sec%60); $('csVoiced').textContent=Math.round(cs.voiced/1000)+'s'; csDraw();
+  if(t>6*60*1000) csStop(); });
+async function csStartStop(){ if(cs){ csStop(); return; } if(!await needMic()) return; Seq.stop(); cs={t0:performance.now(),fr:[],voiced:0,lastT:0,n:0,ring:0,ringN:0}; $('csStart').textContent='■ 다 불렀다 · 분석'; $('csResult').innerHTML=''; $('csCopy').hidden=true; }
+function csStop(){ const d=cs; cs=null; $('csStart').textContent='● 노래 시작'; if(!d) return; csLast=d.fr; csDraw(); const r=analyzeSing(d.fr); csReport(r,d); }
+$('csStart').onclick=csStartStop;
+function csBar(label,v){ if(v===null||v===undefined) return `<div class="cs-row"><span>${label}</span><div class="bar2"></div><span class="v" style="color:var(--faint)">–</span></div>`; return `<div class="cs-row"><span>${label}</span><div class="bar2"><i class="${v>=80?'':v>=55?'mid':'low'}" style="width:${v}%"></i></div><span class="v">${v}</span></div>`; }
+function csReport(r,d){
+  if(!r.ok){ $('csResult').innerHTML=`<div class="cs-fb"><div><b>자료 부족</b>분석하려면 소리 낸 시간이 12초 이상, 또렷이 끈 음이 8개 이상 필요하다. (지금: ${r.voicedSec||0}초 · ${r.notes||0}음) 한 절 정도를 끝까지 불러 보자. 너무 작게 부르거나 폰이 멀면 안 잡힌다.</div></div>`; return; }
+  const fb=[], good=[], sc=r.scores, ring=d.ringN?Math.round(d.ring/d.ringN*1000)/10:null;
+  // 음정
+  if(sc.inton>=85) good.push(['음정',`음의 중심을 정확히 짚는다. 평균 오차 ${r.intonErr}¢ (15¢ 안쪽이면 듣는 사람이 "정확하다"고 느낀다).`]);
+  else fb.push(['음정 · 평균 오차 '+r.intonErr+'¢', (r.lowN>r.highN*1.5?`벗어난 음 대부분이 <b style="display:inline;color:inherit">낮은 쪽</b>이다(낮음 ${r.lowN} / 높음 ${r.highN}). 음을 "위에서 내려 짚는다"고 생각하고, 소리를 키우지 말고 배의 지지를 유지한다. `:r.highN>r.lowN*1.5?`벗어난 음 대부분이 <b style="display:inline;color:inherit">높은 쪽</b>이다(높음 ${r.highN} / 낮음 ${r.lowN}). 밀어붙이는 힘이 과하다. 목·턱 힘을 빼고 한 단계 작게 부른다. `:`높고 낮은 쪽이 섞여 있다. 음과 음 사이 거리가 아직 몸에 덜 붙었다. `)+'연습: 같은 곡을 <b style="display:inline;color:inherit">"마" 한 모음</b>으로 느리게 부르며 위 그래프에서 초록이 이어지게 한다 → 아래 <b style="display:inline;color:inherit">튜너</b>에서 자주 틀리는 음을 3초씩 붙든다.']);
+  if(Math.abs(r.offset)>=18) fb.push(['전체 기준음', `노래 전체가 표준 음높이보다 약 ${Math.abs(r.offset)}¢ ${r.offset>0?'높게':'낮게'} 잡혀 있다. 무반주라면 문제없다(내 안에서는 일정). 반주와 맞출 때는 첫 음을 건반으로 듣고 시작한다.`]);
+  // 안정
+  if(sc.stab!==null){ if(sc.stab>=80) good.push(['긴 음의 안정',`긴 음 흔들림 ${r.stabErr}¢. 호흡이 음을 잘 받치고 있다.`]); else fb.push(['긴 음이 흔들린다 · '+r.stabErr+'¢', (r.slow>=r.fast?'느리게 출렁이는 흔들림이 많다 — 숨의 압력이 일정하지 않다는 뜻이다. ':'빠른 떨림이 많다 — 목·턱·혀뿌리에 힘이 들어가 있다. ')+'연습: 도구 탭의 <b style="display:inline;color:inherit">s/z 호흡</b>과 지속음으로 같은 세기의 숨을 길게 내보내는 감각을 만든 뒤, 편한 음에서 "우—" 8초를 그래프가 일직선이 되게 낸다.']); }
+  if(r.vib>0) good.push(['비브라토',`긴 음 ${r.longN}개 중 ${r.vib}개에서 자연스러운 비브라토(약 ${r.vibRate}회/초, 폭 ±${r.vibExt}¢). 5~7회/초가 건강한 범위다.`]);
+  // 첫 음
+  if(sc.onset!==null){ if(sc.onset>=80) good.push(['첫 음','프레이즈 첫 음을 바로 짚는다.']); else fb.push(['첫 음을 끌어올린다', `프레이즈 첫 음 ${r.firstN}개 중 ${r.scoopUp}개를 밑에서 끌어올려 잡았다${r.scoopDn?`(${r.scoopDn}개는 위에서 떨어뜨림)`:''}. 습관적인 끌어올림은 음정이 낮게 들리게 한다. 연습: 소리 내기 전에 <b style="display:inline;color:inherit">머릿속으로 그 음을 먼저 듣고</b>, 숨을 멈춘 채 입 모양을 만든 뒤 한 번에 낸다. 아래 <b style="display:inline;color:inherit">음정 게임</b>이 이 훈련이다.`]); }
+  // 끝음
+  if(sc.end!==null){ if(sc.end>=80) good.push(['끝음','긴 음의 끝까지 음정을 지킨다.']); else fb.push(['끝음이 처진다 · 평균 '+r.endDrift+'¢', `긴 음 ${r.longCnt}개 중 ${r.flatEnd}개가 끝에서 20¢ 넘게 내려갔다. 숨이 빠지면서 지지도 같이 풀린다. 연습: 끝음을 <b style="display:inline;color:inherit">"끝날수록 배를 더 붙든다"</b>는 느낌으로, 음을 끊는 순간까지 같은 높이로 민다. 끝을 길게 끌지 말고 정한 박에서 깔끔히 끊는다.`]); }
+  // 숨
+  if(sc.breath!==null&&r.phMean<3) fb.push(['프레이즈가 짧다 · 평균 '+r.phMean+'초', '한 숨에 부르는 길이가 짧다. 곡 자체가 짧게 끊기는 곡이면 무시해도 된다. 아니라면 숨 쉴 자리를 악보에 표시하고, 표시한 곳에서만 쉰다. 들이쉴 때 어깨가 아니라 옆구리가 벌어지게.']);
+  // 셈여림
+  if(r.dyn<6) fb.push(['셈여림이 평평하다 · '+r.dyn+'dB', '처음부터 끝까지 거의 같은 크기다. 절은 말하듯 작게, 후렴은 넓게 — 곡 안에 작은 곳과 큰 곳을 미리 정하고 부른다.']); else if(r.dyn>22) fb.push(['크기가 들쭉날쭉 · '+r.dyn+'dB','소리 크기 차이가 아주 크다. 높은 음에서 소리를 지르고 낮은 음에서 꺼지는지 확인한다. 높은 음일수록 크기가 아니라 울림으로 낸다.']);
+  // 음역
+  const rg=S.range&&S.range[0], rhi=rg?name2m(rg.hi):NaN, rlo=rg?name2m(rg.lo):NaN;
+  if(!isNaN(rhi)&&r.hi>=rhi-1.5) fb.push(['키가 높다','이 곡의 높은 음들이 내 최고음('+rg.hi+') 바로 아래에 몰려 있다. 그 자리에서는 음정·안정이 다 무너지기 쉽다. 키를 2~3도 낮춰 불러 보고 점수를 비교한다.']);
+  if(!isNaN(rlo)&&r.lo<=rlo+1) fb.push(['키가 낮다','낮은 음들이 내 최저음('+rg.lo+') 근처다. 낮은 음은 누르지 말고 말하듯 가볍게 낸다. 소리가 안 실리면 키를 올린다.']);
+  if(!fb.length) fb.push(['다음 단계','잴 수 있는 기준은 다 좋다. 이제 같은 곡을 녹음해 직접 들으며 가사 전달과 셈여림의 설계를 다듬는다.']);
+  const text=`[노래 코치] ${$('csSong').value.trim()||'곡 미기재'} · ${todayKey()}\n종합 ${r.total} / 음정 ${sc.inton}(오차 ${r.intonErr}¢, 낮음 ${r.lowN}·높음 ${r.highN}, 전체 치우침 ${r.offset}¢) / 긴 음 안정 ${sc.stab??'-'}(흔들림 ${r.stabErr}¢, 느린 ${r.slow}·빠른 ${r.fast}) / 비브라토 ${r.vib}/${r.longN}음 ${r.vibRate}Hz ±${r.vibExt}¢ / 첫 음 ${sc.onset??'-'}(끌어올림 ${r.scoopUp}/${r.firstN}) / 끝음 ${sc.end??'-'}(평균 ${r.endDrift}¢, 처짐 ${r.flatEnd}/${r.longCnt}) / 프레이즈 평균 ${r.phMean}s 최장 ${r.phMax}s / 셈여림 ${r.dyn}dB / 음역 ${mName(r.lo)}~${mName(r.hi)} 중심 ${mName(r.mid)} / 울림(2-4kHz) ${ring??'-'}% / 소리 ${r.voicedSec}s · ${r.heldN}음`;
+  $('csResult').innerHTML=`<div class="cs-total"><b>${r.total}</b><span>종합 · 소리 낸 시간 ${r.voicedSec}초 · 분석한 음 ${r.heldN}개</span></div>`+csBar('음정',sc.inton)+csBar('긴 음 안정',sc.stab)+csBar('첫 음',sc.onset)+csBar('끝음',sc.end)+csBar('숨 길이',sc.breath)
+    +`<div class="cs-fb">${fb.slice(0,4).map(f=>`<div><b>고칠 것 · ${f[0]}</b>${f[1]}</div>`).join('')}${good.slice(0,3).map(f=>`<div class="good"><b>잘한 것 · ${f[0]}</b>${f[1]}</div>`).join('')}</div>`
+    +`<div class="cs-facts">음역 ${mName(r.lo)} ~ ${mName(r.hi)} (중심 ${mName(r.mid)}) · 프레이즈 평균 ${r.phMean}초, 최장 ${r.phMax}초 · 셈여림 폭 ${r.dyn}dB${ring!==null?` · 울림(2~4kHz 비중) ${ring}%`:''}</div>`;
+  $('csCopy').hidden=false; $('csCopy').onclick=async()=>{ try{ await navigator.clipboard.writeText(text); $('csCopy').textContent='복사했다'; }catch(e){ prompt('아래를 복사',text); } setTimeout(()=>$('csCopy').textContent='결과 복사 (Claude에게 붙여넣기용)',1500); };
+  S.coach.unshift({d:todayKey(),song:$('csSong').value.trim().slice(0,40),total:r.total,inton:sc.inton,stab:sc.stab,end:sc.end,onset:sc.onset,ring}); S.coach=S.coach.slice(0,80); persist(); csHist();
+  if(r.total>=80) Tone.chime();
+}
+function csHist(){ ensureS(); $('csHistWrap').hidden=!S.coach.length; $('csHist').innerHTML=S.coach.slice(0,10).map(h=>`<tr><td class="mono">${h.d.slice(5)}</td><td>${(h.song||'–').replace(/[&<>]/g,'')}</td><td class="mono" style="text-align:right"><b>${h.total}</b></td><td class="mono" style="text-align:right">${h.inton}</td><td class="mono" style="text-align:right">${h.stab??'–'}</td><td class="mono" style="text-align:right">${h.end??'–'}</td></tr>`).join(''); }
+csHist(); csDraw();
 
 // ---------- routine ----------
 let mode='basic', STEPS=buildSteps('basic'), R=null;
