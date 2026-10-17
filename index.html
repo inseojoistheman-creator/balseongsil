@@ -258,13 +258,15 @@ td{padding:6px;border-bottom:1px solid var(--line)}
       <div class="piano" id="piano"></div>
       <div class="tuner" id="tuner"><div class="scale"></div><div class="tick" style="left:10%"></div><div class="tick" style="left:30%"></div><div class="tick c" style="left:50%"></div><div class="tick" style="left:70%"></div><div class="tick" style="left:90%"></div><div class="needle" id="needle"></div><div class="lbl" style="left:8px">−50¢ 낮음</div><div class="lbl" style="right:8px">+50¢ 높음</div><div class="cents" id="centsTxt">–</div></div>
       <div class="leds"><div class="led"><small>기준</small><b id="tRef">–</b></div><div class="led"><small>내 음</small><b id="tNote">–</b></div><div class="led"><small>주파수</small><b id="tHz">–</b></div><div class="led"><small>안정 유지</small><b id="tHold">0.0s</b></div></div>
-      <div class="row"><label>음색</label><div class="seg" id="waveSeg"><button data-w="sine" class="on">부드럽게</button><button data-w="triangle">피아노풍</button></div><label>볼륨</label><input type="range" id="toneVol" min="0" max="1" step="0.05" value="0.35" style="width:120px"></div>
+      <div class="row"><label>음색</label><div class="seg tbSeg"><button data-w="bright" class="on">또렷하게</button><button data-w="piano">피아노풍</button><button data-w="soft">부드럽게</button></div></div>
+      <div class="row"><label>볼륨 <b class="volPct mono">100%</b></label><input type="range" class="volIn" id="toneVol" min="0.2" max="1.6" step="0.05" value="1" style="flex:1;min-width:140px"><button class="btn sm sndTest">🔊 테스트</button></div>
       <div class="why"><b>WHY</b>음정이 흔들리는 건 귀가 아니라 근육의 문제인 경우가 많다. 기준음을 듣고 → 내고 → 눈으로 오차를 확인하는 고리를 반복하면 성대 긴장을 조절하는 근육에 "이 음은 이 정도 힘"이라는 지도가 생긴다. 찬양에서 반음 낮게 처지는 건 대부분 호흡 지지가 빠지면서 생기니, 바늘이 아래로 떨어지면 소리를 키우지 말고 배를 붙잡아라.</div>
     </div>
 
     <div class="rack">
       <h2>음계 · 사이렌 플레이어 <span class="tag">오프라인</span></h2>
       <p class="lead">반주 없이도 연습하게 앱이 음계를 쳐 준다. 립트릴은 사이렌으로, 모음 통일은 5음계로.</p>
+      <div class="row"><label>볼륨 <b class="volPct mono">100%</b></label><input type="range" class="volIn" id="scVol" min="0.2" max="1.6" step="0.05" value="1" style="flex:1;min-width:140px"></div>
       <div class="row"><label>시작음</label><select id="scKey"></select><label>속도</label><div class="seg" id="scTempo"><button data-t="70">느림</button><button data-t="100" class="on">보통</button><button data-t="140">빠름</button></div></div>
       <div class="btnrow"><button class="btn primary" data-sc="five">도레미파솔파미레도</button><button class="btn" data-sc="oct">한 옥타브 ↑↓</button><button class="btn" data-sc="arp">도미솔도솔미도</button><button class="btn" data-sc="siren">사이렌 ↗↘</button><button class="btn" data-sc="up">반음씩 올리기 ×4</button><button class="btn ghost" id="scStop">■ 멈춤</button></div>
       <div class="leds"><div class="led"><small>지금 음</small><b id="scNow">–</b></div><div class="led"><small>진행</small><b id="scProg">–</b></div></div>
@@ -421,6 +423,9 @@ td{padding:6px;border-bottom:1px solid var(--line)}
     </div>
     <div class="rack">
       <h2>설정</h2>
+      <div class="row"><label>기준음 볼륨 <b class="volPct mono">100%</b></label><input type="range" class="volIn" id="setVol" min="0.2" max="1.6" step="0.05" value="1" style="flex:1;min-width:140px"><button class="btn sm sndTest">🔊 테스트</button></div>
+      <div class="row"><label>음색</label><div class="seg tbSeg"><button data-w="bright" class="on">또렷하게</button><button data-w="piano">피아노풍</button><button data-w="soft">부드럽게</button></div></div>
+      <div class="tip">아이폰에서 소리가 작으면: ① 측면 <b>무음 스위치</b>를 끈다 ② 볼륨 버튼으로 미디어 볼륨을 올린다 ③ 여기서 130~160%. "또렷하게"는 배음을 섞어서 폰 스피커에서도 낮은 음이 잘 들린다. 이어폰을 끼면 가장 정확하다.</div>
       <div class="row"><label>화면</label><div class="seg" id="themeSeg"><button data-th="dark" class="on">스튜디오(어둡게)</button><button data-th="light">밝게</button></div></div>
       <div class="btnrow"><button class="btn sm" id="bkCopy">기록 백업 복사</button><button class="btn sm" id="bkPaste">백업 붙여넣기 복원</button></div>
       <div class="sync" id="syncMsg">이 기기에 저장됨</div>
@@ -569,14 +574,14 @@ const SPEED_SAMPLE = '여호와는 나의 목자시니 내게 부족함이 없�
 
 // ---------- state ----------
 const KEY='speech-studio-v1';
-let S={days:[], scores:[], sus:[], best:0, range:[], game:[], speed:[], ch:{}, tt:{}, script:'', marks:{}, theme:'dark', proj:[], sz:[], iv:[], care:{}, tone:0, updatedAt:0};
+let S={days:[], scores:[], sus:[], best:0, range:[], game:[], speed:[], ch:{}, tt:{}, script:'', marks:{}, theme:'dark', proj:[], sz:[], iv:[], care:{}, tone:0, vol:1, timbre:'bright', updatedAt:0};
 try{ const r=localStorage.getItem(KEY); if(r) S=Object.assign(S,JSON.parse(r)); }catch(e){}
 ['proj','sz','iv'].forEach(k=>{ if(!Array.isArray(S[k])) S[k]=[]; }); S.care=S.care||{};
 let db=null, docRef=null, wT=null, applying=false;
 function persist(){ S.updatedAt=Date.now(); try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} if(docRef&&!applying){ clearTimeout(wT); wT=setTimeout(async()=>{ try{ await docRef.set(JSON.parse(JSON.stringify(S))); $('syncMsg').textContent='클라우드에 동기화됨'; }catch(e){ $('syncMsg').textContent='이 기기에 저장됨 (동기화 실패)'; } },600);} }
 (async()=>{ try{ db=await (window.claude?.use?.('db')??Promise.resolve(null)); if(!db) return; docRef=db.doc('state/main'); const s=await docRef.get(); if(s.exists){ const r=s.data(); if((r.updatedAt||0)>(S.updatedAt||0)){ applying=true; S=Object.assign(S,r); try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} renderAll(); applying=false; } else if((S.updatedAt||0)>(r.updatedAt||0)) persist(); } else persist(); $('syncMsg').textContent='클라우드에 동기화됨'; docRef.onSnapshot(sn=>{ if(!sn.exists||sn.metadata.hasPendingWrites) return; const r=sn.data(); if((r.updatedAt||0)>(S.updatedAt||0)){ applying=true; S=Object.assign(S,r); renderAll(); applying=false; } },()=>{}); }catch(e){} })();
 function ensureS(){ ['proj','sz','iv'].forEach(k=>{ if(!Array.isArray(S[k])) S[k]=[]; }); S.care=S.care||{}; }
-function renderAll(){ ensureS(); renderLog(); renderChallenge(); renderScript(); applyTheme(); }
+function renderAll(){ ensureS(); try{ syncVolUI(); setMaster(); }catch(e){} renderLog(); renderChallenge(); renderScript(); applyTheme(); }
 
 // theme
 function applyTheme(){ document.documentElement.setAttribute('data-theme', S.theme||'dark'); document.querySelectorAll('#themeSeg button').forEach(b=>b.classList.toggle('on',b.dataset.th===(S.theme||'dark'))); }
@@ -592,8 +597,12 @@ function showTab(k){ document.querySelectorAll('.tabs button').forEach(b=>b.clas
 function seg(id, fn){ $(id).addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; $(id).querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b)); fn(b.dataset); }); }
 
 // ---------- audio engines ----------
-let AC=null;
-function ac(){ AC=AC||new (window.AudioContext||window.webkitAudioContext)(); if(AC.state==='suspended') AC.resume(); return AC; }
+let AC=null, OUT=null, MG=null, WAVES={};
+const TIMBRES={ bright:[0,1,.85,.7,.6,.5,.42,.35,.28,.22,.17,.13], piano:[0,1,.55,.38,.28,.18,.12,.08,.05], soft:[0,1,.35,.15,.07] };
+function iosPlayback(){ try{ if(navigator.audioSession&&navigator.audioSession.type!=='play-and-record') navigator.audioSession.type='playback'; }catch(e){} }
+function ac(){ if(!AC){ iosPlayback(); AC=new (window.AudioContext||window.webkitAudioContext)(); const comp=AC.createDynamicsCompressor(); comp.threshold.value=-14; comp.knee.value=8; comp.ratio.value=14; comp.attack.value=0.003; comp.release.value=0.15; MG=AC.createGain(); MG.gain.value=1; MG.connect(comp).connect(AC.destination); OUT=MG; Object.entries(TIMBRES).forEach(([k,a])=>{ const re=new Float32Array(a.length), im=new Float32Array(a); WAVES[k]=AC.createPeriodicWave(re,im); }); setMaster(); }
+  if(AC.state==='suspended') AC.resume(); return AC; }
+function setMaster(){ if(MG) MG.gain.value=Math.max(0.05,(S.vol??1))*2.6; }
 const Mic={ stream:null, an:null, buf:null, raf:0, subs:new Set(), on:false,
   async start(){ if(this.on) return true; try{ this.stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}}); }catch(e){ $('micTxt').textContent='마이크 권한 필요'; return false; }
     const c=ac(); const src=c.createMediaStreamSource(this.stream); this.an=c.createAnalyser(); this.an.fftSize=2048; src.connect(this.an); this.buf=new Float32Array(this.an.fftSize); this.on=true; $('micBtn').classList.add('on'); $('micTxt').textContent='MIC ON'; this.loop(); return true; },
@@ -604,14 +613,17 @@ $('micBtn').onclick=()=>{ Mic.on?Mic.stop():Mic.start(); };
 async function needMic(){ if(Mic.on) return true; return await Mic.start(); }
 function pitch(b,sr){ let rms=0; for(let i=0;i<b.length;i++) rms+=b[i]*b[i]; rms=Math.sqrt(rms/b.length); if(rms<0.012) return -1; const SIZE=b.length; let best=-1,bestC=0; const minL=Math.floor(sr/600), maxL=Math.floor(sr/65); let e0=0; for(let i=0;i<SIZE;i++) e0+=b[i]*b[i]; e0/=SIZE; for(let lag=minL;lag<=maxL;lag++){ let c=0; for(let i=0;i<SIZE-lag;i+=2) c+=b[i]*b[i+lag]; c/=((SIZE-lag)/2); if(c>bestC){ bestC=c; best=lag; } } if(best<0||bestC/e0<0.5) return -1; // parabolic refine
   let c0=0,c1=0,c2=0; for(let i=0;i<SIZE-best-1;i+=2){ c0+=b[i]*b[i+best-1]; c1+=b[i]*b[i+best]; c2+=b[i]*b[i+best+1]; } const den=(c0-2*c1+c2); const shift=den? 0.5*(c0-c2)/den : 0; return sr/(best+ (Math.abs(shift)<1?shift:0)); }
-const Tone={ osc:null, g:null, wave:'sine', vol:0.35, seq:0,
-  play(f,dur,slideTo){ const c=ac(); this.stop(false); const o=c.createOscillator(), g=c.createGain(); o.type=this.wave; o.frequency.value=f; if(slideTo){ o.frequency.linearRampToValueAtTime(slideTo, c.currentTime+dur); } g.gain.setValueAtTime(0,c.currentTime); g.gain.linearRampToValueAtTime(this.vol,c.currentTime+0.02); o.connect(g).connect(c.destination); o.start(); if(dur){ g.gain.setValueAtTime(this.vol,c.currentTime+dur-0.05); g.gain.linearRampToValueAtTime(0,c.currentTime+dur); o.stop(c.currentTime+dur+0.02); } this.osc=o; this.g=g; },
+const Tone={ osc:null, g:null, wave:'bright', vol:0.9, seq:0,
+  play(f,dur,slideTo){ const c=ac(); this.stop(false); const o=c.createOscillator(), g=c.createGain(); const w=WAVES[S.timbre||this.wave]; if(w) o.setPeriodicWave(w); else o.type='sine'; o.frequency.value=f; if(slideTo){ o.frequency.linearRampToValueAtTime(slideTo, c.currentTime+dur); } g.gain.setValueAtTime(0,c.currentTime); g.gain.linearRampToValueAtTime(this.vol,c.currentTime+0.02); o.connect(g).connect(OUT); o.start(); if(dur){ g.gain.setValueAtTime(this.vol,c.currentTime+dur-0.05); g.gain.linearRampToValueAtTime(0,c.currentTime+dur); o.stop(c.currentTime+dur+0.02); } this.osc=o; this.g=g; },
   stop(fade=true){ if(this.osc){ try{ const c=ac(); if(fade){ this.g.gain.cancelScheduledValues(c.currentTime); this.g.gain.setValueAtTime(this.g.gain.value,c.currentTime); this.g.gain.linearRampToValueAtTime(0,c.currentTime+0.05); this.osc.stop(c.currentTime+0.06);} else this.osc.stop(); }catch(e){} this.osc=null; } },
-  click(acc){ const c=ac(); const o=c.createOscillator(), g=c.createGain(); o.type='square'; o.frequency.value=acc?1400:900; g.gain.setValueAtTime(acc?0.5:0.3,c.currentTime); g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.06); o.connect(g).connect(c.destination); o.start(); o.stop(c.currentTime+0.07); },
-  chime(){ [660,880,1320].forEach((f,i)=>{ const c=ac(); const o=c.createOscillator(), g=c.createGain(); o.frequency.value=f; g.gain.setValueAtTime(0.0001,c.currentTime+i*0.12); g.gain.exponentialRampToValueAtTime(0.3,c.currentTime+i*0.12+0.02); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+i*0.12+0.5); o.connect(g).connect(c.destination); o.start(c.currentTime+i*0.12); o.stop(c.currentTime+i*0.12+0.55); }); }
+  click(acc){ const c=ac(); const o=c.createOscillator(), g=c.createGain(); o.type='square'; o.frequency.value=acc?1400:900; g.gain.setValueAtTime(acc?0.7:0.45,c.currentTime); g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.07); o.connect(g).connect(OUT); o.start(); o.stop(c.currentTime+0.07); },
+  chime(){ [660,880,1320].forEach((f,i)=>{ const c=ac(); const o=c.createOscillator(), g=c.createGain(); o.frequency.value=f; g.gain.setValueAtTime(0.0001,c.currentTime+i*0.12); g.gain.exponentialRampToValueAtTime(0.6,c.currentTime+i*0.12+0.02); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+i*0.12+0.5); o.connect(g).connect(OUT); o.start(c.currentTime+i*0.12); o.stop(c.currentTime+i*0.12+0.55); }); }
 };
-$('toneVol').oninput=e=>Tone.vol=+e.target.value;
-seg('waveSeg', d=>Tone.wave=d.w);
+function syncVolUI(){ const v=S.vol??1; document.querySelectorAll('.volIn').forEach(el=>{ if(document.activeElement!==el) el.value=v; }); document.querySelectorAll('.volPct').forEach(el=>el.textContent=Math.round(v*100)+'%'); document.querySelectorAll('.tbSeg button').forEach(b=>b.classList.toggle('on',b.dataset.w===(S.timbre||'bright'))); }
+document.querySelectorAll('.volIn').forEach(el=>{ el.oninput=e=>{ S.vol=+e.target.value; ac(); setMaster(); syncVolUI(); }; el.onchange=()=>persist(); });
+document.querySelectorAll('.tbSeg').forEach(sg=>sg.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; S.timbre=b.dataset.w; persist(); syncVolUI(); Tone.play(m2f(57),0.8); }));
+document.querySelectorAll('.sndTest').forEach(b=>b.onclick=()=>{ ac(); setMaster(); Tone.play(m2f(48),0.9); setTimeout(()=>Tone.play(m2f(55),0.9),950); setTimeout(()=>Tone.play(m2f(60),0.9),1900); });
+syncVolUI();
 
 // ---------- sequencer (scales/siren) ----------
 const Seq={ timer:0, run:0,
@@ -726,7 +738,7 @@ $('penBtn').onclick=()=>{ if(pen){ clearInterval(pen); pen=null; $('penRun').hid
 
 // ---------- recorder (shared) ----------
 let recorder=null;
-function bindRec(btnId, listId, label){ const btn=$(btnId); btn.onclick=async()=>{ if(recorder&&recorder.state==='recording'){ recorder.stop(); return; } if(recorder) return; let stream; try{ stream=await navigator.mediaDevices.getUserMedia({audio:true}); }catch(e){ btn.textContent='마이크 권한이 필요하다'; return; } const mime=['audio/mp4','audio/webm;codecs=opus','audio/webm'].find(m=>window.MediaRecorder&&MediaRecorder.isTypeSupported(m))||''; recorder=new MediaRecorder(stream, mime?{mimeType:mime}:undefined); const chunks=[]; recorder.ondataavailable=e=>chunks.push(e.data); const orig=btn.innerHTML; recorder.onstop=()=>{ stream.getTracks().forEach(t=>t.stop()); const blob=new Blob(chunks,{type:recorder.mimeType}); const url=URL.createObjectURL(blob); const row=document.createElement('div'); row.className='rec'; row.innerHTML=`<span class="lbl">${label} · ${new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}</span><audio controls src="${url}"></audio>`; $(listId).prepend(row); while($(listId).children.length>4) $(listId).lastChild.remove(); btn.innerHTML=orig; recorder=null; if(listId==='recs') autoChallenge('hymn'); if(listId==='pmRecs') autoChallenge('pray'); }; recorder.start(); btn.innerHTML='■ 녹음 중… 누르면 멈춤'; }; }
+function bindRec(btnId, listId, label){ const btn=$(btnId); btn.onclick=async()=>{ if(recorder&&recorder.state==='recording'){ recorder.stop(); return; } if(recorder) return; let stream; try{ stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}}); }catch(e){ btn.textContent='마이크 권한이 필요하다'; return; } const mime=['audio/mp4','audio/webm;codecs=opus','audio/webm'].find(m=>window.MediaRecorder&&MediaRecorder.isTypeSupported(m))||''; recorder=new MediaRecorder(stream, mime?{mimeType:mime}:undefined); const chunks=[]; recorder.ondataavailable=e=>chunks.push(e.data); const orig=btn.innerHTML; recorder.onstop=()=>{ stream.getTracks().forEach(t=>t.stop()); const blob=new Blob(chunks,{type:recorder.mimeType}); const url=URL.createObjectURL(blob); const row=document.createElement('div'); row.className='rec'; row.innerHTML=`<span class="lbl">${label} · ${new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}</span><audio controls src="${url}"></audio>`; $(listId).prepend(row); while($(listId).children.length>4) $(listId).lastChild.remove(); btn.innerHTML=orig; recorder=null; if(listId==='recs') autoChallenge('hymn'); if(listId==='pmRecs') autoChallenge('pray'); }; recorder.start(); btn.innerHTML='■ 녹음 중… 누르면 멈춤'; }; }
 bindRec('recBtn','recs','녹음'); bindRec('ttRec','ttRecs','잰말'); bindRec('pmRec','pmRecs','낭독'); bindRec('penRec','penRecs','비교');
 
 // ---------- meter & pitch graph ----------
